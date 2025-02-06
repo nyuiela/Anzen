@@ -21,6 +21,11 @@ import AdminDashboard from '@/pages/AdminDashboard';
 import AIAgentsPage from '@/pages/AIAgentsPage';
 import PricingPage from '@/pages/PricingPage';
 import ContactPage from '@/pages/ContactPage';
+import SecurityPage from '@/pages/SecurityPage';
+import BlockchainPage from '@/pages/BlockchainPage';
+import SettingsPage from '@/pages/SettingsPage';
+import BillingPage from '@/pages/BillingPage';
+import BlogPage from '@/pages/BlogPage';
 
 function App() {
   return (
@@ -45,6 +50,11 @@ function App() {
               <Route path="/ai-agents" element={<AIAgentsPage />} />
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/security" element={<SecurityPage />} />
+              <Route path="/blockchain" element={<BlockchainPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/billing" element={<BillingPage />} />
+              <Route path="/blog" element={<BlogPage />} />
             </Routes>
           </main>
           <Footer />
