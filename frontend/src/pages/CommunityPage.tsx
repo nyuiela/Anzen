@@ -12,7 +12,7 @@ import {
   MessageSquare,
   Github,
   Twitter,
-  Discord,
+  MessageCircle as Discord,
   Award,
   Heart,
   Sparkles,

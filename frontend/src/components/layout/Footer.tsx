@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import {
   Github,
   Twitter,
-  Discord,
+  MessageCircle,
   Heart,
   HardDrive,
 } from 'lucide-react';
@@ -31,7 +31,7 @@ export default function Footer() {
                 <Github className="h-5 w-5" />
               </a>
               <a href="#" className="text-muted-foreground hover:text-primary">
-                <Discord className="h-5 w-5" />
+                <MessageCircle className="h-5 w-5" />
               </a>
             </div>
           </div>

@@ -23,8 +23,8 @@ import PricingPage from '@/pages/PricingPage';
 import ContactPage from '@/pages/ContactPage';
 import SecurityPage from '@/pages/SecurityPage';
 import BlockchainPage from '@/pages/BlockchainPage';
-import SettingsPage from '@/pages/SettingsPage';
-import BillingPage from '@/pages/BillingPage';
+import SettingsPage from './pages/SettingsPage';
+import BillingPage from './pages/BillingPage';
 import BlogPage from '@/pages/BlogPage';
 
 function App() {

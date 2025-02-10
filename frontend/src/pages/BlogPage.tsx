@@ -1,45 +1,41 @@
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Search, ArrowRight, Calendar, User, Tag } from 'lucide-react';
 
 export default function BlogPage() {
   const posts = [
     {
       id: 1,
-      title: 'Introducing Zero-Knowledge Storage',
-      excerpt: 'Learn how we're implementing zero-knowledge proofs for secure file storage',
-      author: 'Alex Rivers',
-      date: 'March 15, 2024',
-      tags: ['Security', 'Zero-Knowledge', 'Tech'],
-      image: 'https://images.unsplash.com/photo-1633265486064-086b219458ec?auto=format&fit=crop&w=800',
+      title: "Introducing Zero-Knowledge Storage",
+      excerpt: "Learn how we're implementing zero-knowledge proofs for secure file storage",
+      author: "Alex Rivers",
+      date: "March 15, 2024",
+      tags: ["Security", "Zero-Knowledge", "Tech"],
+      image: "https://images.unsplash.com/photo-1633265486064-086b219458ec?auto=format&fit=crop&w=800",
     },
     {
       id: 2,
-      title: 'The Future of Decentralized Storage',
-      excerpt: 'Exploring the possibilities of blockchain-based file storage systems',
-      author: 'Sarah Chen',
-      date: 'March 10, 2024',
-      tags: ['Blockchain', 'IPFS', 'Future'],
-      image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=800',
+      title: "The Future of Decentralized Storage",
+      excerpt: "Exploring the possibilities of blockchain-based file storage systems",
+      author: "Sarah Chen",
+      date: "March 10, 2024",
+      tags: ["Blockchain", "IPFS", "Future"],
+      image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=800",
     },
     {
       id: 3,
-      title: 'AI-Powered File Management',
-      excerpt: 'How AI agents are revolutionizing the way we organize and access files',
-      author: 'Marcus Kim',
-      date: 'March 5, 2024',
-      tags: ['AI', 'Innovation', 'Tech'],
-      image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800',
-    },
-  ];
+      title: "AI-Powered File Management",
+      excerpt: "How AI agents are revolutionizing the way we organize and access files",
+      author: "Marcus Kim",
+      date: "March 5, 2024",
+      tags: ["AI", "Innovation", "Tech"],
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800",
+    }
+  ]; // No trailing comma before closing bracket
+  
+  
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
