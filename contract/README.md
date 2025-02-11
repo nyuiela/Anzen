@@ -1,66 +1,26 @@
-## Foundry
+### Gameplan
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## onchange DAta storage
 
-Foundry consists of:
+spanning over memories, historical data, (reprogrammable data),
+Access control - Monetization and source <- data mapping.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+q: how do we store the data?? swarm
+q: how can we map and attach metadata ? through smartcontract?
+q:
+(EVERYTHING HERE IS ACCESS CONTROL.) - getting hash from the contract with the right access.
 
-## Documentation
+content creators -------- traveler ---- friends teens --- ONlyfans --- rearchers
 
-https://book.getfoundry.sh/
+their data> swarm --> upload to the ebbeeees ---> hash ---hash && signature of user ----- thvalue ID ()user ----(s()encrypt encrypt
+user --> adds a bond needed to access
 
-## Usage
+interestedviewerorreprogrammer----> value ID(user) --> bond ---> user(approves the transctaion) --> access granted , can see this person vault stuff .
 
-### Build
+reprogrammerable ---- >
 
-```shell
-$ forge build
-```
+**AccessControl**
 
-### Test
+**DataSHaring**
 
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+user ---> platoform ----> createstorage(uinique stoage, upload and group a)ll ------
