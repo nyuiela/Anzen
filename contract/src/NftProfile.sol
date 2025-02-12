@@ -4,15 +4,11 @@ pragma solidity 0.8.28;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-// import "@openzeppelin/contracts/drafts/Counters.sol";
-
 contract ProfileImageNfts is ERC721, Ownable {
-    // using Counters for Counters.Counter;
     using Strings for uint256;
 
-    // Counters.Counter _tokenIds
-    uint256 _tokenIds = 0;
-    mapping(uint256 => string) _tokenURIs;
+    uint256 private _tokenIds = 0;
+    mapping(uint256 => string) private _tokenURIs;
 
     struct RenderToken {
         uint256 id;
@@ -20,7 +16,7 @@ contract ProfileImageNfts is ERC721, Ownable {
         string space;
     }
 
-    constructor() ERC721("ProfileImageNfts", "PIN") {}
+    constructor() ERC721("ProfileImageNfts", "PIN") Ownable(msg.sender) {}
 
     function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal {
         _tokenURIs[tokenId] = _tokenURI;
@@ -28,32 +24,24 @@ contract ProfileImageNfts is ERC721, Ownable {
 
     function tokenURI(
         uint256 tokenId
-    ) public view virtual override returns (string memory) {
-        require(_exists(tokenId), "URI not exist on that ID");
-        string memory _RUri = _tokenURIs[tokenId];
-        return _RUri;
+    ) public view override returns (string memory) {
+        //  require(_exists(tokenId), "URI does not exist for this ID");
+        return _tokenURIs[tokenId];
     }
 
-    function getAlltoken() public view returns (RenderToken[] memory) {
-        uint256 latestId = _tokenIds;
-        RenderToken[] memory res = new RenderToken[](latestId);
-        for (uint256 i = 0; i <= latestId; i++) {
-            if (_exists(i)) {
-                string memory uri = tokenURI(i);
-                res[i] = RenderToken(i, uri, " ");
-            }
-        }
-        return res;
-    }
-
+    // whats the goal/task here...    people can store their nft and use it as profile picture if they want Heyyyyyy
+    // okay so a dynamic way
+    // heyyyyy,
     function mint(
-        address recipents,
+        address recipient,
         string memory _uri
     ) public returns (uint256) {
-        uint256 newId = _tokenIds++;
-        _mint(recipents, newId);
+        uint256 newId = _tokenIds;
+        _tokenIds++;
+
+        _mint(recipient, newId);
         _setTokenURI(newId, _uri);
-        _tokenIds.increment();
+
         return newId;
     }
 }
