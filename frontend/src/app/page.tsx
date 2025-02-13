@@ -1,22 +1,29 @@
-// import Image from "next/image";
 "use client"
 import ImageTrail from '@/components/imageTrail';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Shield, Lock, Share2 } from 'lucide-react';
 import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
 import Aurora from '@/components/aurora';
+import { useRouter } from 'next/navigation';
+import { ConnectButton, useAccount } from '@particle-network/connectkit';
+
 export default function Home() {
    const key = ''
+   const router = useRouter()
+   const account = useAccount()
+   const started = () => {
+      return account.isConnected ? router.push("/dasboard") : <ConnectButton />
+   }
    return (
       <div className="min-h-screen bg-background flex flex-col">
-
-         <Navbar />
          <Aurora
             colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
             speed={0.2}
          />
+
+         <Navbar />
+
          <main className="container mx-auto px-4 py-8 flex-1 z-[1]">
 
             {/* <div style={{ height: '500px', position: 'relative', overflow: 'hidden' }}> */}
@@ -34,7 +41,7 @@ export default function Home() {
                      'https://picsum.photos/id/1029/300/300',
                      'https://picsum.photos/id/1030/300/300',
                      // ...
-                  ]}
+                  ] as string[]}
                   variant={1}
                />
                <section className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 py-12 lg:py-4">
@@ -43,7 +50,7 @@ export default function Home() {
                      animate={{ opacity: 1, x: 0 }}
                      className="flex-1 max-w-2xl"
                   >
-                     <h1 className="text-4xl md:text-6xl font-bold text-primary-dark">
+                     <h1 className="text-5xl md:text-6xl font-bold text-primary-dark font-['panchang'] ">
                         Secure Your Digital Legacy
                      </h1>
                      <p className="mt-6 text-xl text-muted-foreground">
@@ -51,10 +58,13 @@ export default function Home() {
                         privacy. Store, share, and manage your digital assets with complete control.
                      </p>
                      <div className="mt-8 flex gap-4">
-                        <Button size="lg" asChild>
-                           <a href="/dashboard">
+                        <Button size="lg" className='cursor-pointer' asChild onClick={started}>
+                           {/* <a href="/dashboard"> */}
+                           <p>
+
                               Get Started <ArrowRight className="ml-2 h-5 w-5" />
-                           </a>
+                           </p>
+                           {/* </a> */}
                         </Button>
                         <Button size="lg" variant="outline" asChild>
                            <a href="/explore">Explore Files</a>
@@ -92,7 +102,7 @@ export default function Home() {
             </div>
             {/* </div> */}
          </main>
-         <Footer />
+         {/* <Footer /> */}
       </div>
    );
 }

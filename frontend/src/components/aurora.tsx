@@ -1,3 +1,4 @@
+"use client"
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import { useEffect, useRef } from "react";
 
@@ -208,5 +209,5 @@ export default function Aurora(props: AuroraProps) {
       };
    }, [amplitude, colorStops]);
 
-   return <div ref={ctnDom} className="w-[100vw] h-screen absolute z-0" />;
+   return <div ref={ctnDom} className="w-full h-screen absolute z-0" />;
 }

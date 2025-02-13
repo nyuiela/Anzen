@@ -164,3 +164,8 @@ body {
 .glass {
   @apply bg-black/40 backdrop-blur-md border border-white/10;
 }
+
+@font-face {
+  font-family: panchang;
+  src: url(./fonts/Panchang-Bold.otf);
+}

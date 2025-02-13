@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import { ParticleConnectkit } from "@/context/Connectkit";
+import Aurora from "@/components/aurora";
+import Footer from "@/components/footer";
 
 const geistSans = localFont({
    src: "./fonts/GeistVF.woff",
@@ -38,10 +40,17 @@ export default function RootLayout({
             >
                <ParticleConnectkit>
 
+                  {/* <Aurora
+                     colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
+                     speed={0.2}
+                  /> */}
+
 
                   {children}
+                  <Footer />
                </ParticleConnectkit>
             </ThemeProvider>
+
          </body>
       </html>
    );
