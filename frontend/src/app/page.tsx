@@ -1,20 +1,39 @@
 "use client"
+
 import ImageTrail from '@/components/imageTrail';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Lock, Share2 } from 'lucide-react';
+import { Shield, Lock, Share2 } from 'lucide-react';
 import Navbar from '@/components/navbar';
 import Aurora from '@/components/aurora';
-import { useRouter } from 'next/navigation';
-import { ConnectButton, useAccount } from '@particle-network/connectkit';
+// import { useRouter } from 'next/navigation';
+// import { ConnectButton, useAccount } from '@particle-network/connectkit';
+import { useEffect, useState } from 'react';
+import { ConnectDialog } from '@/components/connectDialog';
+import { isInstalled, getAddress } from "@gemwallet/api";
+
 
 export default function Home() {
    const key = ''
-   const router = useRouter()
-   const account = useAccount()
-   const started = () => {
-      return account.isConnected ? router.push("/dasboard") : <ConnectButton />
-   }
+   const [profile, setProfile] = useState({
+      owner: "",
+      exists: false
+   })
+
+
+   // const router = useRouter()
+   // const account = useAccount()
+   // const started = () => {
+   // return account.isConnected ? router.push("/dasboard") : <ConnectButton />
+   // }
+   useEffect(() => {
+      async function getProfile() {
+         // const profile = await entry.methods.getProfile().call({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+         // console.log(profile);
+         // setProfile(profile)
+      }
+      getProfile()
+   }, [])
    return (
       <div className="min-h-screen bg-background flex flex-col">
          <Aurora
@@ -58,16 +77,9 @@ export default function Home() {
                         privacy. Store, share, and manage your digital assets with complete control.
                      </p>
                      <div className="mt-8 flex gap-4">
-                        <Button size="lg" className='cursor-pointer' asChild onClick={started}>
-                           {/* <a href="/dashboard"> */}
-                           <p>
-
-                              Get Started <ArrowRight className="ml-2 h-5 w-5" />
-                           </p>
-                           {/* </a> */}
-                        </Button>
+                        {!profile.exists && <ConnectDialog />}
                         <Button size="lg" variant="outline" asChild>
-                           <a href="/explore">Explore Files</a>
+                           <a href="/dashboard">Explore Files</a>
                         </Button>
                      </div>
                   </motion.div>

@@ -10,8 +10,12 @@
   },
   "dependencies": {
     "@ethersphere/bee-js": "^8.3.1",
+    "@gemwallet/api": "^3.8.0",
+    "@hookform/resolvers": "^4.0.0",
     "@particle-network/connectkit": "^2.0.15",
+    "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
+    "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-navigation-menu": "^1.2.5",
     "@radix-ui/react-progress": "^1.1.2",
     "@radix-ui/react-select": "^2.1.6",
@@ -20,6 +24,7 @@
     "@radix-ui/react-toast": "^1.2.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "formidable": "^3.5.2",
     "framer-motion": "^12.4.2",
     "gsap": "^3.12.7",
     "lucide-react": "^0.475.0",
@@ -29,11 +34,16 @@
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.3.5",
+    "react-hook-form": "^7.54.2",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
-    "viem": "^2"
+    "viem": "^2",
+    "web3": "^4.16.0",
+    "xrpl": "^4.2.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/formidable": "^3.4.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

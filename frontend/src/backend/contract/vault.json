@@ -1,0 +1,276 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      { "name": "_owner", "type": "address", "internalType": "address" }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "addFileToFolder",
+    "inputs": [
+      { "name": "_foldername", "type": "string", "internalType": "string" },
+      { "name": "_fileId", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "batchStore",
+    "inputs": [
+      { "name": "_name", "type": "string[]", "internalType": "string[]" },
+      {
+        "name": "_swarmHashEncrypted",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
+      },
+      {
+        "name": "_metadata",
+        "type": "tuple",
+        "internalType": "struct DataStructure.MetaData",
+        "components": [
+          {
+            "name": "dateUploaded",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "lastModified",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createFolder",
+    "inputs": [
+      { "name": "_fileId", "type": "bytes32[]", "internalType": "bytes32[]" },
+      { "name": "_foldername", "type": "string", "internalType": "string" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "download",
+    "inputs": [
+      { "name": "_fileId", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "_accessCode", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct DataStructure.File",
+        "components": [
+          { "name": "name", "type": "string", "internalType": "string" },
+          { "name": "id", "type": "bytes32", "internalType": "bytes32" },
+          { "name": "owner", "type": "address", "internalType": "address" },
+          {
+            "name": "swarmHashEncrypted",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "metadata",
+            "type": "tuple",
+            "internalType": "struct DataStructure.MetaData",
+            "components": [
+              {
+                "name": "dateUploaded",
+                "type": "uint256",
+                "internalType": "uint256"
+              },
+              {
+                "name": "lastModified",
+                "type": "uint256",
+                "internalType": "uint256"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "generateAccessCode",
+    "inputs": [
+      { "name": "_fileId", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "_expire", "type": "uint256", "internalType": "uint256" },
+      {
+        "name": "_getStatus",
+        "type": "uint8",
+        "internalType": "enum Vault.GetStatus"
+      }
+    ],
+    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getFile",
+    "inputs": [
+      { "name": "_fileId", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "_accessCode", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct DataStructure.File",
+        "components": [
+          { "name": "name", "type": "string", "internalType": "string" },
+          { "name": "id", "type": "bytes32", "internalType": "bytes32" },
+          { "name": "owner", "type": "address", "internalType": "address" },
+          {
+            "name": "swarmHashEncrypted",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "metadata",
+            "type": "tuple",
+            "internalType": "struct DataStructure.MetaData",
+            "components": [
+              {
+                "name": "dateUploaded",
+                "type": "uint256",
+                "internalType": "uint256"
+              },
+              {
+                "name": "lastModified",
+                "type": "uint256",
+                "internalType": "uint256"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "removeFile",
+    "inputs": [
+      { "name": "_fileId", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "removeFileFromFolder",
+    "inputs": [
+      { "name": "_foldername", "type": "string", "internalType": "string" },
+      { "name": "_fileId", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "removebatchFile",
+    "inputs": [
+      { "name": "_fileId", "type": "bytes32[]", "internalType": "bytes32[]" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "renounceOwnership",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "store",
+    "inputs": [
+      { "name": "_name", "type": "string", "internalType": "string" },
+      {
+        "name": "_swarmHashEncrypted",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "_metadata",
+        "type": "tuple",
+        "internalType": "struct DataStructure.MetaData",
+        "components": [
+          {
+            "name": "dateUploaded",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "lastModified",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "inputs": [
+      { "name": "newOwner", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "inputs": [
+      {
+        "name": "previousOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "OwnableInvalidOwner",
+    "inputs": [
+      { "name": "owner", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "OwnableUnauthorizedAccount",
+    "inputs": [
+      { "name": "account", "type": "address", "internalType": "address" }
+    ]
+  }
+]

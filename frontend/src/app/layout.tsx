@@ -38,17 +38,17 @@ export default function RootLayout({
                enableSystem
                disableTransitionOnChange
             >
-               <ParticleConnectkit>
+               {/* <ParticleConnectkit> */}
 
-                  {/* <Aurora
+               {/* <Aurora
                      colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
                      speed={0.2}
                   /> */}
 
 
-                  {children}
-                  <Footer />
-               </ParticleConnectkit>
+               {children}
+               <Footer />
+               {/* </ParticleConnectkit> */}
             </ThemeProvider>
 
          </body>

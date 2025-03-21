@@ -23,6 +23,7 @@ export interface File {
    comments: number;
 }
 
+
 interface AppState {
    user: User | null;
    files: File[];

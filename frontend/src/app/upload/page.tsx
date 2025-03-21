@@ -34,13 +34,27 @@ export default function UploadPage() {
    });
 
    const handleUpload = async () => {
+      if (acceptedFiles.length === 0) return;
+
       setUploading(true);
-      // Simulate upload progress
-      for (let i = 0; i <= 100; i += 10) {
-         setProgress(i);
-         await new Promise((resolve) => setTimeout(resolve, 500));
+      const formData = new FormData();
+      formData.append("file", acceptedFiles[0]); // Add the first selected file
+
+      try {
+         const response = await fetch("api/bee/upload", {
+            method: "POST",
+            body: formData,
+         });
+
+         if (!response.ok) throw new Error("Failed to upload file");
+
+         const result = await response.json();
+         console.log("File uploaded successfully:", result.path);
+      } catch (error) {
+         console.error("Error uploading file:", (error as Error).message);
+      } finally {
+         setUploading(false);
       }
-      setUploading(false);
    };
 
    return (

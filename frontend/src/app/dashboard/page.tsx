@@ -1,21 +1,57 @@
 "use client"
 import { motion } from 'framer-motion';
 import { useStore } from '@/lib/store';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Upload, Lock, Users, Eye } from 'lucide-react';
+import { Lock, Users, Eye } from 'lucide-react';
 import FileGrid from '@/components/files/FileGrid';
 import Navbar from '@/components/navbar';
 import CircularGallery from '@/components/CircularGallery'
+import { VaultDialog } from '@/components/vaultDialog';
+import CustomButton from '@/components/customButton';
+import { entry, factory, vault } from '@/backend/web3';
+import { DropdownVault } from '@/components/cards/dropdownVault';
+import { ConnectDialog } from '@/components/connectDialog';
+import { useEffect, useState } from 'react';
+import { VaultTable } from '@/components/cards/vaultTable';
+import { VaultGroupDialog } from '@/components/vaultGroup';
+import { GroupDialog } from '@/components/groupDialog';
 
 export default function Dashboard() {
-   const { files } = useStore();
+   // const { files } = useStore();
+   const [profile, setProfile] = useState({
+      vaults: []
+   })
 
-   const privateFiles = files.filter((f) => f.privacy === 'private');
-   const sharedFiles = files.filter((f) => f.privacy === 'shared');
-   const publicFiles = files.filter((f) => f.privacy === 'public');
+   // const privateFiles = files.filter((f) => f.privacy === 'private');
+   // const sharedFiles = files.filter((f) => f.privacy === 'shared');
+   // const publicFiles = files.filter((f) => f.privacy === 'public');
+   const click = async () => {
+      await factory.methods.createVault().call({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+   }
 
+   useEffect(() => {
+      async function getVaults() {
+         const profile = await entry.methods.getProfile().call({ from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" })
+         setProfile(profile);
+         // profile.vaults.map((item) => items.push({
+         //    image: "`https://picsum.photos/seed/1/800/600?grayscale`",
+         //    text: item,
+         // }));
+      }
+      getVaults()
+   }, [])
+   // files = profile.vaults;
+   // const items = profile.vaults;
+   console.log(profile)
+   // {
+   //    image: `https://picsum.photos/seed/1/800/600?grayscale`,
+   //    text: "Bridge",
+   // },
+   // {
+   //    image: `https://picsum.photos/seed/2/800/600?grayscale`,
+   //    text: "Desk Setup",
+   // }
 
    return (
       <div className="min-h-screen bg-background flex flex-col z-[10]">
@@ -35,7 +71,7 @@ export default function Dashboard() {
                         </CardTitle>
                      </CardHeader>
                      <CardContent>
-                        <div className="text-3xl font-bold">{privateFiles.length}</div>
+                        <div className="text-3xl font-bold">{0}</div>
                      </CardContent>
                   </Card>
                   <Card className="flex-1">
@@ -46,7 +82,7 @@ export default function Dashboard() {
                         </CardTitle>
                      </CardHeader>
                      <CardContent>
-                        <div className="text-3xl font-bold">{sharedFiles.length}</div>
+                        <div className="text-3xl font-bold">{0}</div>
                      </CardContent>
                   </Card>
                   <Card className="flex-1">
@@ -57,31 +93,33 @@ export default function Dashboard() {
                         </CardTitle>
                      </CardHeader>
                      <CardContent>
-                        <div className="text-3xl font-bold">{publicFiles.length}</div>
+                        <div className="text-3xl font-bold">{0}</div>
                      </CardContent>
                   </Card>
                </motion.div>
 
                <div className="flex justify-between items-center">
-                  <h2 className="text-3xl font-bold">Your Files</h2>
-                  <Button asChild>
-                     <a href="/upload">
-                        <Upload className="mr-2 h-5 w-5" /> Upload Files
-                     </a>
-                  </Button>
+                  <h2 className="text-3xl font-bold">Your Vaults</h2>
+                  {/* <VaultDialog /> */}
+                  {/* <DropdownVault /> */}
+                  <GroupDialog />
+                  <VaultDialog />
+                  <VaultGroupDialog />
+                  {/* <ConnectDialog /> */}
+                  {/* <CustomButton label='Create Vault' click={click} /> */}
                </div>
 
                <Tabs defaultValue="all" className="w-full">
-                  <TabsList>
+                  {/* <TabsList>
                      <TabsTrigger value="all">All Files</TabsTrigger>
                      <TabsTrigger value="private">Private</TabsTrigger>
                      <TabsTrigger value="shared">Shared</TabsTrigger>
                      <TabsTrigger value="public">Public</TabsTrigger>
-                  </TabsList>
+                  </TabsList> */}
                   <TabsContent value="all">
-                     <FileGrid files={files} />
+                     <VaultTable address={profile.vaults} />
                   </TabsContent>
-                  <TabsContent value="private">
+                  {/* <TabsContent value="private">
                      <FileGrid files={privateFiles} />
                   </TabsContent>
                   <TabsContent value="shared">
@@ -89,11 +127,11 @@ export default function Dashboard() {
                   </TabsContent>
                   <TabsContent value="public">
                      <FileGrid files={publicFiles} />
-                  </TabsContent>
+                  </TabsContent> */}
                </Tabs>
             </div>
             <div style={{ height: '600px', position: 'relative' }} className='w-full flex justify-center'>
-               <CircularGallery bend={3} textColor="#ffffff" borderRadius={0.05} />
+               {/* <CircularGallery items={items} bend={3} textColor="#ffffff" borderRadius={0.05} /> */}
             </div>
 
          </main>

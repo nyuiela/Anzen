@@ -58,7 +58,7 @@ export default function FileGrid({ files }: FileGridProps) {
                      <CardContent>
                         <h3 className="font-semibold truncate">{file.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                           {formatDistanceToNow(file.uploadedAt, { addSuffix: true })}
+                           {/* {formatDistanceToNow(file.uploadedAt, { addSuffix: true })} */}
                         </p>
                      </CardContent>
                      <CardFooter className="text-sm text-muted-foreground">
