@@ -4,27 +4,13 @@ import "./dataStructures/DataStructure.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Vault is DataStructure, Ownable {
-    //    ## vault --- cloned
-    // - createVault() //multiple vaults
-    // - upload()
-    // - download()
-    // - ListVaults() onlyOwner() ---- getter function
-    // - getFile(vaultId, dataId, accesscode)
-    // - getFolder(vaulId, dataId[], accesscode);
-    // -  removeVault
-    // -  removeData
-    // -  removefolder
-    // - generateAccessCodes(vaultId,data/data[], user);
     address private owner;
-
-    // bool addToFolder;
 
     constructor(address _owner) Ownable(_owner) {
         owner = _owner;
     }
 
     mapping(bytes32 => File) private file;
-    //  mapping(bytes => Folder)[] private folder;
     enum GetStatus {
         VIEWONLY,
         DOWNLOADABLE
@@ -40,7 +26,7 @@ contract Vault is DataStructure, Ownable {
         string memory _name,
         /*bytes32 _id,*/ bytes32 _swarmHashEncrypted,
         MetaData memory _metadata
-    ) public {
+    ) public onlyOwner {
         _metadata = MetaData({dateUploaded: block.timestamp, lastModified: 0});
         bytes32 _id = keccak256(abi.encodePacked(_name, _swarmHashEncrypted));
         file[_id] = File({
@@ -50,19 +36,69 @@ contract Vault is DataStructure, Ownable {
             swarmHashEncrypted: _swarmHashEncrypted,
             metadata: _metadata
         });
+        // emit an event for store, backend grabs the reference , and hashes it.......we need a uinque root to decypher the hash
     }
-
-    //   uint256[] folder;
-
-    //function createFolder() external{}
 
     function batchStore(
         string[] memory _name,
         /*bytes32 _id,*/ bytes32[] calldata _swarmHashEncrypted,
         MetaData calldata _metadata
-    ) external {
+    ) external onlyOwner {
         for (uint256 i = 0; i < _swarmHashEncrypted.length; i++) {
             store(_name[i], _swarmHashEncrypted[i], _metadata);
+        }
+    }
+
+    struct Folder {
+        bytes32[] fileId;
+        string foldername;
+        address owner;
+        //   bool exist;
+    }
+    mapping(bytes32 => Folder) private folder;
+
+    function createFolder(
+        bytes32[] calldata _fileId,
+        string memory _foldername
+    ) external onlyOwner {
+        // check if user has profil
+        bytes32 _folderHash = keccak256(
+            abi.encodePacked(msg.sender, _foldername)
+        );
+        folder[_folderHash] = Folder({
+            fileId: _fileId,
+            foldername: _foldername,
+            owner: msg.sender
+            // exist : true
+        });
+    }
+
+    function addFileToFolder(
+        string calldata _foldername,
+        bytes32 _fileId
+    ) external onlyOwner {
+        bytes32 _folderHash = keccak256(
+            abi.encodePacked(msg.sender, _foldername)
+        );
+        require(folder[_folderHash].owner == msg.sender, "Vault__Not_Owner");
+        folder[_folderHash].fileId.push(_fileId);
+    }
+
+    function removeFileFromFolder(
+        string calldata _foldername,
+        bytes32 _fileId
+    ) external onlyOwner {
+        bytes32 _folderHash = keccak256(
+            abi.encodePacked(msg.sender, _foldername)
+        );
+        require(folder[_folderHash].owner == msg.sender, "Vault__Not_Owner");
+        //   folder[_folderHash].fileId.push(_fileId);
+        bytes32[] storage _files = folder[_folderHash].fileId;
+        for (uint256 i; i < _files.length; i++) {
+            if (_files[i] == _fileId) {
+                _files[i] = _files[_files.length - 1];
+                _files.pop();
+            }
         }
     }
 
@@ -100,10 +136,6 @@ contract Vault is DataStructure, Ownable {
                 return file[_fileId];
             }
         }
-
-        //both owner and allowed people
-        //chec
-        // require(accessCodes.)
     }
 
     //  function getFolder() external /* onlyOwner / authorized */ {
@@ -124,6 +156,10 @@ contract Vault is DataStructure, Ownable {
         }
     }
 
+
+// we might ditch this step here, seems unless to me
+// okay we will use the hash , file id, status to rehash it again , that will be what will be given to buyers or people who have to pay first
+
     function generateAccessCode(
         bytes32 _fileId,
         uint256 _expire /* onlyOwner */,
@@ -139,6 +175,7 @@ contract Vault is DataStructure, Ownable {
                 getStatus: _getStatus
             })
         );
+        //transfert(msg.sender, address(accescodeContract), code)
         return code;
     }
 }
