@@ -2,6 +2,9 @@
 
 *About Auzen*
 
+*Video Demo link*
+
+*Vercel link*
 
 *Goals*
 
@@ -21,6 +24,8 @@
 *swarm*
 
 
+## Future improvement
+
 ### Getting started
 
 ```
@@ -34,3 +39,4 @@ make
 ```
 forge test
 ```
+
