@@ -36,6 +36,7 @@ contract Vault is DataStructure, Ownable {
             swarmHashEncrypted: _swarmHashEncrypted,
             metadata: _metadata
         });
+        // emit an event for store, backend grabs the reference , and hashes it.......we need a uinque root to decypher the hash
     }
 
     function batchStore(
@@ -154,6 +155,10 @@ contract Vault is DataStructure, Ownable {
             removeFile(_fileId[i]);
         }
     }
+
+
+// we might ditch this step here, seems unless to me
+// okay we will use the hash , file id, status to rehash it again , that will be what will be given to buyers or people who have to pay first
 
     function generateAccessCode(
         bytes32 _fileId,
