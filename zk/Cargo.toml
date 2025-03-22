@@ -1,0 +1,29 @@
+[package]
+name = "ecc1"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+expander_compiler = { git = "https://github.com/PolyhedraZK/ExpanderCompilerCollection" }
+reqwest = { version = "0.12.12", features = ["blocking"] }
+serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
+gkr = { path="./Expander/gkr"}
+config = { path="./Expander/config" }
+mpi_config = { path="./Expander/config/mpi_config" }
+arith = { path = "./Expander/arith" }
+gkr_field_config = { path = "./Expander/config/gkr_field_config" }
+poly_commit = { path = "./Expander/poly_commit" }
+polynomials = { path = "./Expander/arith/polynomials" }
+transcript = { path = "./Expander/transcript" }
+utils = { path = "./Expander/utils" }
+circuit = { path = "./Expander/circuit" }
+rand = "0.8.5"
+rand_chacha = "0.3.1"
+actix-web = { version = "4.10.2", features = ["macros"] }
+serde = "1.0.219"
+sha2 = "0.10"
+anyhow = "1.0"
+
+[[bin]]
+name = "serve"
+path = "src/requestxk.rs"
