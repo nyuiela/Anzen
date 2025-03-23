@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract MArketPlace is Ownable, ReentrancyGuard {
     IERC20 quoteAsset;
+    IERC20 rewardToken;
     uint256 public marketCount;
     mapping(uint256 => mapping(address => UserPosition)) public userPositions;
     event MarketCreated(
@@ -33,6 +34,7 @@ contract MArketPlace is Ownable, ReentrancyGuard {
         uint256 bond;
         string des;
         address owner;
+        bytes32 witnessHash;
     }
 
     struct UserPosition {
@@ -218,11 +220,65 @@ function getActivityCount() public view returns(uint256 _count) {
 
 }
 
-function addReward()external onlyOwner {}
+struct Reward {
+    uint256 rewardamount;
+    uint40 startTime;
+   // uint256 totalReward;
+}
+struct UserRewardInfo {
+    uint256 totalReward;
+    uint256 claimedReward;
+    uint256 lastClaimedTime;
+}
+mapping(address => UserRewardInfo) private userRewardInfo;
+//mapping(address => uint256) private userTorReward;
+uint256 private accumlatedRewards;
 
-function calculateReward() internal return(uint256 reward){}
+function addReward(uint256 _rewardamount, uint40 startTime)external onlyOwner {
+    require(startTime > block.timestamp, "MarketPlace__Startime_cannot_be_in_the_past");    
+  Reward storage _reward = Reward({
+    rewardamount: _rewardamount,
+    startTime: startTime
+   // totalReward : _rewardamount
+});
+accumlatedRewards += _rewardamount;
+    rewardToken.transferFrom(msg.sender, address(this), _rewardamount);
+}
 
-function claimRward() public {}
+function calculateReward() internal return(uint256 reward){
+    (uint256 _count) = getActivityCount();
+     require(_count > 0, "MarketPlace__No_Activity");
+}
+
+function claimReward() external{
+_claim();
+}
+
+function getTotalRewards() public view returns(uint256) {
+    return accumlatedRewards;
+}
+function _claim() internal {
+    _updateReward();
+    userRewardInfo storage _userRewardInfo = userRewardInfo[msg.sender];
+uint256 _reward = _userRewardInfo.totalReward; 
+
+accumlatedRewards -= _reward;
+rewardToken.transferFrom(address(this), msg.sender, _reward);
+}
+
+function _updateReward() internal {
+    Reward storage _reward;
+    
+userRewardInfo storage _userRewardInfo = userRewardInfo[msg.sender];
+   require( _reward.startTime >= block.timestamp, "MarketPlace__Reward_not_yet_started");
+    
+    (uint256 _reward)= calculateReward();
+    _userRewardInfo.totalReward += _reward;
+    _userRewardInfo.claimedReward = 0;
+    _userRewardInfo.lastClaimedTime = block.timestamp;
+
+   
+}
 
 function calculateProtocolFees(uint256 amount) external view returns(uint256 fee){
 
@@ -283,12 +339,15 @@ event FeeReceiverUpdated(address indexed oldAddress, address indexed newAddress)
         uint256 _marketId,
         uint256 _amount,
         uint256 _bond,
-        string memory description //   bytes32 accessCode;
+        string memory description, //   bytes32 accessCode;
+        bytes32 _witnessHash
     ) internal {
         UserPosition storage position = userPositions[_marketId][msg.sender];
+        require(_witnesHash != 0, "MarketPlace__WitnessHash_cannot_be_empty");
+        
         if (position.exists) {
             files[_marketId].push(
-                Files({id: _id, reward: _amount, bond: _bond, des: description, owner: msg.sender})
+                Files({id: _id, reward: _amount, bond: _bond, des: description, owner: msg.sender, witnessHash: _witnessHash})
             );
         } else {
             userPositions[_marketId][msg.sender] = UserPosition(
@@ -300,7 +359,7 @@ event FeeReceiverUpdated(address indexed oldAddress, address indexed newAddress)
                 description
             );
             files[_marketId].push(
-                Files({id: _id, reward: _amount, bond: _bond, des: description, owner: msg.sender})
+                Files({id: _id, reward: _amount, bond: _bond, des: description, owner: msg.sender, witnessHash: _witnessHash})
             );
         }
     }
