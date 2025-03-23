@@ -22,7 +22,7 @@ In a world where personal data is constantly exploited, leaked, or controlled by
 By leveraging decentralized storage, cryptographic security, and smart contract-based permissions, Auzen ensures that data remains secure, private, and fully owned by its creators—no third parties involved.
 Auzen's goal is to onboard users on web3 while keeping their data secured. 
 
-*Flow work*
+## Flow work
 
 
 ## Features
