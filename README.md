@@ -27,28 +27,31 @@ Auzen's goal is to onboard users on web3 while keeping their data secured.
 
 ## Features
 
-**Registering** 
+**Registering:** 
 uses resgister their account (account can be public or Private)-- Privacy status can be updated
 
-**Groups**
+**Groups:**
 user can create group(can be public or private) anyone can join public groups since its permissionless, user needs to add people to private group.(Group vault is accessible by all members, members can also add their vaults in group) user can create as many vaults as they want.
 
-**Uploading**
+**Uploading:**
+users upload their data to swarm.
 
-**Creation (creating Vault)**
+**Creation (creating Vault):**
 user can create as many vault as they want
 vault is customizable 
 files and folders can be sorted 
 
-**Autorization**
+**Autorization:**
 vault owner can autorize anyone to view files in vault. By directing adding the persson to access list.
 
-**Downloading**
+**Downloading:**
 accessable vault content can be downlaoded 
 
-**Reprogramability**
+**Reprogramability:**
+This is a feature that allows users to buy parts of a user data and use to to make a new data.
+Tis feature hasnt been implemented yet and is one of the many future implematation features.
 
-**MarketPlace**
+**MarketPlace:**
 Creation of market is ownable(onlyAdmin) so has to prevent duplicate markets in the system.
 users can request creation of markets.
 
@@ -58,9 +61,13 @@ entermaket - data seller can entermarket, add files and vault . they are require
 
 activity count -- whenever a user makes a buy or adds data to the market, their activity count incease. Activity count enables users to earn rewards.
 
-**Reward**
+**Reward:**
+Rewards are added by adnin and distributed.
+Only users with activity count can claim reward.
 
 **Fee**
+fee is charged on every buy. for now  we add fee to just the buy function but maybe over time it might apply to the entermarket function.
+Fee cannot be more that 20% of bond(amount). Fee is in percentage (2000, 1500).
 
 ## Tech used
 
