@@ -23,12 +23,12 @@ By leveraging decentralized storage, cryptographic security, and smart contract-
 Auzen's goal is to onboard users on web3 while keeping their data secured. 
 
 ## Flow work
-user => registeres --> creates vault --> upload data and stores in vault ---> autorization Whitelist 
-create group --> join group --> add vault to group
-user joins market --> Zk verification of data --> adds data or vaults with data with important info(description) --> earns 
-company(Ai company buying people data) --> Zk verification ---> buys
-company(Ai company buying people data) --> keyless login ---> buys
-buyer --> keyless login --> buys
+*user => registeres --> creates vault --> upload data and stores in vault ---> autorization Whitelist*
+*create group --> join group --> add vault to group*
+*user joins market --> Zk verification of data --> adds data or vaults with data with important info(description) --> earns*
+*company(Ai company buying people data) --> Zk verification ---> buys*
+*company(Ai company buying people data) --> keyless login ---> buys*
+*buyer --> keyless login --> buys*
 
 
 
