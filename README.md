@@ -65,7 +65,7 @@ activity count -- whenever a user makes a buy or adds data to the market, their 
 Rewards are added by adnin and distributed.
 Only users with activity count can claim reward.
 
-**Fee**
+**Fee:**
 fee is charged on every buy. for now  we add fee to just the buy function but maybe over time it might apply to the entermarket function.
 Fee cannot be more that 20% of bond(amount). Fee is in percentage (2000, 1500).
 
