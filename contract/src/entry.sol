@@ -12,11 +12,11 @@ contract Entry is DataStructure {
     mapping(address => mapping(address => bool)) private access;
     mapping(address => address[]) private requests;
     mapping(string => bool) private usernames;
-    mapping(uint256 => CreateGroup) private group;
+    mapping(uint256 => CreateGroup) private group; // CreateGroup not found okay lets add it adding it
 
     modifier isNewUser(address) {
         require(
-            !users[msg.sender].exists,
+            users[msg.sender].exists,
             "Entry__Can_Not_Register_Same_account_Twice"
         );
         _;
@@ -34,7 +34,7 @@ contract Entry is DataStructure {
     function connect(
         string memory _userName,
         uint256 _tokenId,
-        PRIVACY _privacy
+        DataStructure.Privacy _privacy
     ) external isNewUser(msg.sender) {
         require(!usernames[_userName], "Entry__UserName_Taken");
 
@@ -70,7 +70,7 @@ contract Entry is DataStructure {
         string memory _name,
         address[] calldata members,
         uint256 _tokenId,
-        PRIVACY _privacy
+        DataStructure.Privacy _privacy
     ) external {
         CreateGroup memory _group = CreateGroup({
             name: _name,
@@ -86,7 +86,7 @@ contract Entry is DataStructure {
     function joinPublicGroup(uint256 _groupId) external {
         CreateGroup storage _group = group[_groupId];
         require(
-            _group.privacy == PRIVACY.PUBLIC,
+            _group.privacy == DataStructure.Privacy.PUBLIC,
             "Entry__Cannot_Join_Private_Group"
         );
         _group.members.push(msg.sender);
@@ -95,7 +95,7 @@ contract Entry is DataStructure {
     function updateUserProfile(
         string memory _username,
         uint256 _tokenId,
-        PRIVACY _privacy
+        DataStructure.Privacy _privacy
     ) external onlyAccountOwner {
         require(!usernames[_username], "Entry__UserName_Taken");
 

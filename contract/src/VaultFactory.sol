@@ -3,7 +3,7 @@ pragma solidity 0.8.28;
 import "./vault.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/proxy/clones.sol";
-import {IEntry} from "./interfaces/IEntry.sol";
+import {IEntry} from "./interface/IEntry.sol";
 
 contract VaultFactory is Ownable {
     using Clones for address;
@@ -18,14 +18,19 @@ contract VaultFactory is Ownable {
     //  event VaultCreate(address owner);
     event SetEntry(address entry, uint256 date);
 
-    function createVault() public {
+    //  enum VaultType {
+    //      PERSONAL,
+    //      GROUP
+    //  }
+
+    function createVault() public returns (address) {
         address newVault = address(vault).clone();
-        entry.addVault(msg.sender, newVault);
+        return newVault;
     }
 
     function setEntry(address entryAddress) external onlyOwner {
         entry = IEntry(entryAddress);
-        emit SetEntry(entryAddress, date);
+        emit SetEntry(entryAddress, block.timestamp); // which date?
     }
 
     //  function DeleteVault() public {}

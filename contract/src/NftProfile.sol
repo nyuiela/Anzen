@@ -4,7 +4,6 @@ pragma solidity 0.8.28;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-
 contract ProfileImageNfts is ERC721, Ownable {
     using Strings for uint256;
 
@@ -47,7 +46,7 @@ contract ProfileImageNfts is ERC721, Ownable {
     }
 
     function isOwnerOFToken(uint256 tokenId) public view returns (bool) {
-       address _owner =  ownerOf(uint256 tokenId);
-        return owner == msg.sender;
+        address _owner = ownerOf(tokenId);
+        return _owner == msg.sender;
     }
 }

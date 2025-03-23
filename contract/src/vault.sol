@@ -4,10 +4,10 @@ import "./dataStructures/DataStructure.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Vault is DataStructure, Ownable {
-    address private owner;
+    //  address private owner;
 
     constructor(address _owner) Ownable(_owner) {
-        owner = _owner;
+        //   owner = _owner;
     }
 
     mapping(bytes32 => File) private file;
@@ -105,7 +105,7 @@ contract Vault is DataStructure, Ownable {
     function download(
         bytes32 _fileId,
         bytes32 _accessCode /* onlyOwner / authorized */
-    ) external returns (File memory) {
+    ) external view returns (File memory) {
         for (uint256 i = 0; i < accessCodes[_fileId].length; i++) {
             if (accessCodes[_fileId][i].accesscode == _accessCode) {
                 require(
@@ -119,6 +119,14 @@ contract Vault is DataStructure, Ownable {
                 return file[_fileId];
             }
         }
+        File memory fl = File(
+            "",
+            "",
+            msg.sender,
+            "",
+            MetaData(block.timestamp, block.timestamp)
+        );
+        return fl;
     }
 
     // function listVaults()
@@ -136,6 +144,14 @@ contract Vault is DataStructure, Ownable {
                 return file[_fileId];
             }
         }
+        File memory fl = File(
+            "",
+            "",
+            msg.sender,
+            "",
+            MetaData(block.timestamp, block.timestamp)
+        );
+        return fl;
     }
 
     //  function getFolder() external /* onlyOwner / authorized */ {
@@ -156,9 +172,8 @@ contract Vault is DataStructure, Ownable {
         }
     }
 
-
-// we might ditch this step here, seems unless to me
-// okay we will use the hash , file id, status to rehash it again , that will be what will be given to buyers or people who have to pay first
+    // we might ditch this step here, seems unless to me
+    // okay we will use the hash , file id, status to rehash it again , that will be what will be given to buyers or people who have to pay first
 
     function generateAccessCode(
         bytes32 _fileId,
