@@ -123,29 +123,39 @@ function createRequestedMarket(uint256 _requestId) external onlyOwner {
         return files[_marketId];
     }
 
+uint256 private accumulatedFees;
     //erc20 payment
     //see the file
     // buys, pays the bond
     // they get the access code then they view or whatever
     //should triger a tx for the older of the id, when theoner signs it he receives the moeny , sim the buyer gets the acces code
     function buy(uint256 _marketId, uint256 id) external {
+        activity();
      require ( files[_marketId][id].duration > block.timestamp, "MarketPlace: File is no longer available");
      Market storage _market = market[_marketId];
-    _market.totalDeposits += _amount;
+
+         uint256 _amount = files[_marketId][id].bond;
+
+        (uint256 fee )= calculateProtocolFee(_amount);
+
+        uint256 amountToadd = _amount - fee;
+       accumulatedFee += fee; 
+    _market.totalDeposits += amountToadd;
         //   _market.duration;
     (address owner)= getOwnerOf(_marketId, id);
     UserPosition storage position = userPositions[_marketId][msg.sender];
     uint256 previousamount = position.amount;  
-    position.amount = previousamount + _amount;
+    position.amount = previousamount + amountToadd;
 
-    uint256 _amount = files[_marketId][id].bond;
+
         
      quoteAsset.transferFrom(msg.sender, address(this), _amount);
 
         // after buying each buyer gets a unique access code, they enter it and view or download or whatever it  is
 
         // generate uinque hash aka access code
-        // create something like the signature digest or a root to break the has and get the req and give user 
+        // create something like the signature digest or a root to break the has and get the req and give user //
+        //aggreed on emitting eent and backend listening in to autorize msg.sender
     }
 
 
@@ -154,6 +164,7 @@ function getOwnerOf(uint256 _marketId, uint256 id) external view returns (addres
  
     }
     function EnterMarket(bytes32 _id, uint256 _marketId, uint256 _amount, uint256 bond, string memory description) external view {
+        activity();
         Market storage _market = market[_marketId];
         UserPosition storage position = userPositions[_marketId][msg.sender];
         addTomarket(_id, _marketId, _amount, bond, description);
@@ -166,9 +177,91 @@ function addVaultToMarket(uint256 _marketId, address _vault) external {
 }
 
 
-function withdrawShare() external {}
+function withdrawShare(uint256 _amountTowithdraw, uint256 _marketId) external {
+      UserPosition storage position = userPositions[_marketId][msg.sender];
 
-function ExistMarket() external {}
+      uint256 amountmade = position.amount;
+
+      require(_amountTowithdraw <= amountmade , "MarketPlace_NOt_EnoughFunds");
+      
+ 
+     onWithdraw(_amountTowithdraw, _marketId);
+
+      quote.transferFrom(address(this), msg.sender , _amount);
+       
+}
+
+function ensureLiquidity(uint256 _amountTowithdraw) internal {
+     require(address(this).balance > _amountTowithdraw,"MarketPlace__contact_doest_have_enough_balance");
+}
+
+function onWithdraw(uint256 amount, _marketId) internal {
+    ensureLiquidity(amount);
+Market storage _market = market[_marketId];
+    _market.totalDeposits -= _amount;
+
+}
+
+uint256 private nonce;
+
+mapping(address => uint256) private activityCount; 
+function activity() internal returns(uint256 count){
+
+    count = nonce++;
+
+    activityCount[msg.sender][count];
+}
+
+
+function getActivityCount() public view returns(uint256 _count) {
+ _count = activityCount[msg.sender][count];
+
+}
+
+function addReward()external onlyOwner {}
+
+function calculateReward() internal return(uint256 reward){}
+
+function claimRward() public {}
+
+function calculateProtocolFees(uint256 amount) external view returns(uint256 fee){
+
+   // leftamount = amount.mulDiv()
+  fee  = (amount * feerange) / BIPS;
+  
+  fee == 0 ? WAD : fee ; 
+
+}
+
+function withdrawProtocolFees(uint256 _amount)external {
+    uint256 profit = accumlatedFee;
+    
+    require(profit >= _amount, "MarketPlace__Not_enough_profit");
+
+    accumlatedFee = profit - _amount;
+
+    require(address(this).balance > _amount,"MarketPlace__contact_doest_have_enough_balance");
+
+    quote.transferFrom(address(this), feeREceiver, _amount);
+ 
+}
+
+uint256 public constant BIPS = 10_000;
+
+uint256 public constant FeeLimit = 2000;
+uint256 public feerange;
+function setFeeRange(uint256 _newRange) external {
+    require(_newRanger < FeeLimit, "MarketPLace_canNot_Be_more_Than_limit");
+    feerange = _newRange;
+}
+
+address public feeREceiver = keccak256(abi.encode("feeReceiver"));
+function setFeeReceiver(address _newFeeReceiver) external {
+    feeREceiver = _newFeeReceiver;
+    emit FeeReceiverUpdated(feeReceiver, _newFeeReceiver);
+}
+
+event FeeReceiverUpdated(address indexed oldAddress, address indexed newAddress)
 
 
 
