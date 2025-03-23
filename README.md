@@ -26,14 +26,41 @@ Auzen's goal is to onboard users on web3 while keeping their data secured.
 
 
 ## Features
-**Registering** 
-**Uploading**
-**Creation (creating Vault)**
-**Autorization**
-**Downloading**
-**Groups**
-**MarketPlace**
 
+**Registering** 
+uses resgister their account (account can be public or Private)-- Privacy status can be updated
+
+**Groups**
+user can create group(can be public or private) anyone can join public groups since its permissionless, user needs to add people to private group.(Group vault is accessible by all members, members can also add their vaults in group) user can create as many vaults as they want.
+
+**Uploading**
+
+**Creation (creating Vault)**
+user can create as many vault as they want
+vault is customizable 
+files and folders can be sorted 
+
+**Autorization**
+vault owner can autorize anyone to view files in vault. By directing adding the persson to access list.
+
+**Downloading**
+accessable vault content can be downlaoded 
+
+**Reprogramability**
+
+**MarketPlace**
+Creation of market is ownable(onlyAdmin) so has to prevent duplicate markets in the system.
+users can request creation of markets.
+
+buy - buying from market is keyless -- thhis means you dont have to be a registered user to purchase data from the market. (zk keyless login). After a purchase has been made and event is emitted and the backend listen to that even to include msg.sender to the authorization to that file or data purchced. 
+
+entermaket - data seller can entermarket, add files and vault . they are require to indicate the data duration in the market and the bond(amount required to buy). Note: bond can be 0 (meaning that data is free). User is require to submit a witnessHash to prove existance of data. (zk proof)
+
+activity count -- whenever a user makes a buy or adds data to the market, their activity count incease. Activity count enables users to earn rewards.
+
+**Reward**
+
+**Fee**
 
 ## Tech used
 
