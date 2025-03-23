@@ -1,103 +1,122 @@
+# ![Auzen](https://github.com/user-attachments/assets/684a61d1-d0cc-4a33-8155-87a89aedaddb)
 
-![auzen](https://github.com/user-attachments/assets/684a61d1-d0cc-4a33-8155-87a89aedaddb)
+## **Auzen**
 
-### Auzen
+### **About Auzen**  
+Auzen is a **decentralized data storage and management platform** designed to give users **full control** over their digital assets.  
+Built on **Swarm and Ethereum**, it enables **secure, censorship-resistant, and on-chain storage**, allowing individuals and organizations to **store, organize, share, and monetize** their data without relying on centralized platforms.  
 
-*About Auzen*
-Auzen is a decentralized data storage and management platform designed to give users full control over their digital assets. 
-Built on Swarm and Ethereum, it enables secure, censorship-resistant, and on-chain storage, allowing individuals and organizations to store,
-organize, share, and monetize their data without relying on centralized platforms.
+Tired of having your personal data **stolen, exploited, or put at risk** by centralized platforms? **Auzen is here to change that!**  
+- **Store your data securely** on a decentralized network.  
+- **Control who accesses it.**  
+- **Monetize your data on your terms.**  
+- **Share with ZK-verified companies** while ensuring authenticity and security.  
+- **Contribute without fear—your input is immutable and protected.**  
 
-Tired of having your personal data stolen, exploited, or put at risk by centralized platforms? Auzen is here to change that! Store your data securely on a decentralized network, control who accesses it, and monetize it on your terms. Share with ZK-verified companies while ensuring authenticity and security. Contribute without fear—your input is immutable and protected. 
-
-*Video Demo link*
+### **Video Demo link**
 ```
 ```
-*Vercel link*
+
+
+### **Vercel link**
 ```
 ```
 
-## Goals
-In a world where personal data is constantly exploited, leaked, or controlled by corporations, Auzen puts power back into the hands of users. 
-By leveraging decentralized storage, cryptographic security, and smart contract-based permissions, Auzen ensures that data remains secure, private, and fully owned by its creators—no third parties involved.
-Auzen's goal is to onboard users on web3 while keeping their data secured. 
 
-## Flow work
-*user => registeres --> creates vault --> upload data and stores in vault ---> autorization Whitelist*
-*create group --> join group --> add vault to group*
-*user joins market --> Zk verification of data --> adds data or vaults with data with important info(description) --> earns*
-*company(Ai company buying people data) --> Zk verification ---> buys*
-*company(Ai company buying people data) --> keyless login ---> buys*
-*buyer --> keyless login --> buys*
+---
 
+## **Goals**
+In a world where personal data is constantly **exploited, leaked, or controlled** by corporations, Auzen puts power back into the hands of users.  
+By leveraging **decentralized storage, cryptographic security, and smart contract-based permissions**, Auzen ensures that data remains **secure, private, and fully owned by its creators—no third parties involved.**  
 
+**Auzen's goal is to onboard users onto Web3 while keeping their data secure.**  
 
-## Features
+---
 
-**Registering:** 
-uses resgister their account (account can be public or Private)-- Privacy status can be updated
+## **Flow Work**
+- **User → Registers → Creates Vault → Uploads Data and Stores in Vault → Authorization Whitelist.**  
+- **Creates Group → Joins Group → Adds Vault to Group.**  
+- **User Joins Market → ZK Verification of Data → Adds Data or Vaults with Important Info (Description) → Earns.**  
+- **Company (AI Company Buying People’s Data) → ZK Verification → Buys.**  
+- **Company (AI Company Buying People’s Data) → Keyless Login → Buys.**  
+- **Buyer → Keyless Login → Buys.**  
 
-**Groups:**
-user can create group(can be public or private) anyone can join public groups since its permissionless, user needs to add people to private group.(Group vault is accessible by all members, members can also add their vaults in group) user can create as many vaults as they want.
+---
 
-**Uploading:**
-users upload their data to swarm.
+## **Features**
 
-**Creation (creating Vault):**
-user can create as many vault as they want
-vault is customizable 
-files and folders can be sorted 
+### **Registering**
+- Users register their account (**public or private**).  
+- Privacy status can be updated anytime.  
 
-**Autorization:**
-vault owner can autorize anyone to view files in vault. By directing adding the persson to access list.
+### **Groups**
+- Users can create groups (**public or private**).  
+- Anyone can join **public groups** since they are permissionless.  
+- Private groups require an **invite from the creator**.  
+- Group vaults are **accessible to all members**, and members can **add their own vaults** to the group.  
 
-**Downloading:**
-accessable vault content can be downlaoded 
+### **Uploading**
+- Users upload their **data to Swarm** securely.  
 
-**Reprogramability:**
-This is a feature that allows users to buy parts of a user data and use to to make a new data.
-Tis feature hasnt been implemented yet and is one of the many future implematation features.
+### **Vault Creation**
+- Users can create **multiple vaults** with **customizable settings**.  
+- Files and folders can be **sorted and organized**.  
 
-**MarketPlace:**
-Creation of market is ownable(onlyAdmin) so has to prevent duplicate markets in the system.
-users can request creation of markets.
+### **Authorization**
+- Vault owners can **authorize specific users** to access files.  
 
-buy - buying from market is keyless -- thhis means you dont have to be a registered user to purchase data from the market. (zk keyless login). After a purchase has been made and event is emitted and the backend listen to that even to include msg.sender to the authorization to that file or data purchced. 
+### **Downloading**
+- Accessible vault content can be **downloaded securely**.  
 
-entermaket - data seller can entermarket, add files and vault . they are require to indicate the data duration in the market and the bond(amount required to buy). Note: bond can be 0 (meaning that data is free). User is require to submit a witnessHash to prove existance of data. (zk proof)
+### **Reprogrammability (Future Feature)**
+- This feature will allow users to **sell parts of their data** for new data creations.  
+- **Still under development**.  
 
-activity count -- whenever a user makes a buy or adds data to the market, their activity count incease. Activity count enables users to earn rewards.
+### **Marketplace**
+- Marketplace creation is **admin-controlled** to prevent duplicates.  
+- Users can **request marketplace creation**.  
+- **Buying Data:**  
+  - **Keyless buying** (ZK keyless login) means **users don’t need an account** to purchase data.  
+  - After a purchase, an **event is emitted**, and the backend listens to **add msg.sender to the access list** of the purchased file or data.  
+- **Entering the Marketplace:**  
+  - Sellers **submit data** for sale.  
+  - Sellers must **set data duration** and **bond price** (which can be **0 for free data**).  
+  - Sellers submit a **witnessHash** for **ZK proof of data existence**.  
+- **Activity Count:**  
+  - Users’ activity count **increases with every buy or marketplace contribution**.  
+  - Activity count helps users **earn rewards**.  
 
-**Reward:**
-Rewards are added by adnin and distributed.
-Only users with activity count can claim reward.
+### **Rewards**
+- **Admin distributes rewards** to **active users**.  
+- **Only users with activity counts** can **claim rewards**.  
 
-**Fee:**
-fee is charged on every buy. for now  we add fee to just the buy function but maybe over time it might apply to the entermarket function.
-Fee cannot be more that 20% of bond(amount). Fee is in percentage (2000, 1500).
+### **Fees**
+- **Fees are charged on every buy** (currently only on purchases).  
+- **Fee cannot exceed 20% of the bond price**.  
+- **Fees are in percentage format (e.g., 2000, 1500).**  
 
-## Tech used
+---
 
-*ZK verification*
+## **Tech Used**
+- **ZK Verification**  
+- **XRPL**  
+- **Swarm**  
 
-*XRPL*
+---
 
-*swarm*
+## **Future Improvements**
+- Further **enhancements and additional features** will be implemented.  
 
+---
 
-## Future improvement
+## **Getting Started**
 
-### Getting started
-
-```
+### **Clone the Repository**
+```bash
 git clone https://github.com/nyuiela/Anzen
 cd Anzen
 cd contract
 make
 ```
 
-*run test*
-```
-forge test
-```
 
