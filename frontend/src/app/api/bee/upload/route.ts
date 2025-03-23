@@ -21,14 +21,27 @@ export async function POST(req: Request) {
 
       // Save the file to the 'public/uploads' directory
 
-      const postageBatchId = await bee.createPostageBatch("17463640064", 17)
-      const result = await bee.uploadFile(postageBatchId, file, file.name)
-      console.log(result)
+      // const postageBatchId = await bee.createPostageBatch("17463640064", 17)
+      // const result = await bee.uploadFile(postageBatchId, file, file.name)
+      // console.log(result)
+
+
+      // generate witness file
+      const witnessResponse = await fetch("http://localhost:3031/generate-witness", {
+         method: "POST",
+         body: JSON.stringify({
+            f: "a",
+            r: "a",
+            s: "a"
+         })
+      })
+      const wr = await witnessResponse.arrayBuffer()
+      console.log("wr ", wr)
       return NextResponse.json({
          success: "true",
          fileName: file.name,
-         postageBatchId: postageBatchId,
-         data: result,
+         // postageBatchId: postageBatchId,
+         // data: result,
       }, { status: 200 })
    } catch (error) {
       console.log(error)

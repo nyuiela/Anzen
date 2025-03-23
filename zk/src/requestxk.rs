@@ -72,6 +72,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new().service(
             web::resource("/generate-witness").route(web::post().to(generate_witness))
+            // web::resource("/verify").route(web::post().to(generate_witness)
         )
     })
         .bind("127.0.0.1:3031")?
