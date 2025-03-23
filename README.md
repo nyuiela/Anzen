@@ -25,14 +25,14 @@ Auzen's goal is to onboard users on web3 while keeping their data secured.
 *Flow work*
 
 
-*Features*
-Registering 
-Uploading
-Creation (creating Vault)
-Autorization
-Downloading
-Groups
-MarketPlace
+## Features
+**Registering** 
+**Uploading**
+**Creation (creating Vault)**
+**Autorization**
+**Downloading**
+**Groups**
+**MarketPlace**
 
 
 ## Tech used
