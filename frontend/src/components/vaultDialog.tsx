@@ -13,8 +13,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import CustomButton from "./customButton"
-import { factory } from "@/backend/web3"
+import { entry, factory, vault } from "@/backend/web3"
+import { useSelector } from "react-redux"
 export function VaultDialog() {
+   const user = useSelector((state) => state.account);
+   console.log("User vault: ", user)
    const [value, setValue] = useState({
       name: ""
    })
@@ -23,14 +26,27 @@ export function VaultDialog() {
    }
 
    async function click() {
-      await factory.methods.createVault(value.name).send({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+      // const user = useSelector((state) => state.account);
+      console.log("User vault: ", user)
+      const txReceipt = await factory.methods.createVault('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', value.name)
+         // .send()
+         .send({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+      console.log(txReceipt)
+      const vaultAddress = txReceipt.events.VaultCreated.returnValues.clone;
+      console.log("Vault Address:", vaultAddress);
+
+      // console.log("Vault Address ", vaultAddress)
+      const added = await entry.methods.addVaultToUser(vaultAddress).send({
+         from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+      })
+      console.log(added)
+
    }
 
 
-   const handleSelectChange = (selectedValue: string) => {
-      setValue((prevValue) => ({ ...prevValue, privacy: selectedValue }))
-   }
-   console.log(value)
+   // const handleSelectChange = (selectedValue: string) => {
+   //    setValue((prevValue) => ({ ...prevValue, privacy: selectedValue }))
+   // }
 
    return (
       <Dialog>

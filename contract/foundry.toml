@@ -3,11 +3,12 @@ src = "src"
 out = "out"
 libs = ["lib"]
 
-remappings = ["@openzeppelin/contracts=lib/openzeppelin-contracts/contracts"]
+remappings = ["@openzeppelin/contracts=lib/openzeppelin-contracts/contracts",
+"@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts"]
 
 [rpc_endpoints]
 sidechain = "${SIDECHAIN_URL}"
-
+localchain = "${LOCALCHAIN_URL}"
 [etherscan]
 sidechain = { key = "${SIDECHAIN_KEY}" }
 

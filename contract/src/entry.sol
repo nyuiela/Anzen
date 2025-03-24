@@ -16,7 +16,7 @@ contract Entry is DataStructure {
 
     modifier isNewUser(address) {
         require(
-            users[msg.sender].exists,
+            !users[msg.sender].exists,
             "Entry__Can_Not_Register_Same_account_Twice"
         );
         _;
@@ -53,10 +53,10 @@ contract Entry is DataStructure {
     }
 
     function addVaultToUser(
-        address _user,
+        //   address _user,
         address _vaultAddress
     ) external /*onlyAuthorized*/ {
-        users[_user].vaults.push(_vaultAddress);
+        users[msg.sender].vaults.push(_vaultAddress);
     }
 
     function addVaultToGroup(
@@ -65,6 +65,8 @@ contract Entry is DataStructure {
     ) external /*onlyAuthorized*/ {
         group[_groupId].vaults.push(_vaultAddress);
     }
+
+    event GroupCreated(address owner, uint256 id, string name);
 
     function createGroup(
         string memory _name,
@@ -81,6 +83,7 @@ contract Entry is DataStructure {
         });
         nextGroupId++;
         group[nextGroupId] = _group;
+        emit GroupCreated(msg.sender, nextGroupId, _name);
     }
 
     function joinPublicGroup(uint256 _groupId) external {

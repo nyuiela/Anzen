@@ -7,19 +7,72 @@
         "name": "quoteAssetAddress",
         "type": "address",
         "internalType": "address"
-      },
-      { "name": "", "type": "address", "internalType": "address" }
+      }
     ],
     "stateMutability": "nonpayable"
   },
   {
     "type": "function",
-    "name": "addTomarket",
+    "name": "BIPS",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "EnterMarket",
     "inputs": [
       { "name": "_id", "type": "bytes32", "internalType": "bytes32" },
       { "name": "_marketId", "type": "uint256", "internalType": "uint256" },
       { "name": "_amount", "type": "uint256", "internalType": "uint256" },
-      { "name": "_bond", "type": "uint256", "internalType": "uint256" }
+      { "name": "_duration", "type": "uint256", "internalType": "uint256" },
+      { "name": "_bond", "type": "uint256", "internalType": "uint256" },
+      { "name": "_description", "type": "string", "internalType": "string" },
+      { "name": "_witnessHash", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "FeeLimit",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "WAD",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "_reward",
+    "inputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
+    "outputs": [
+      { "name": "rewardamount", "type": "uint256", "internalType": "uint256" },
+      { "name": "startTime", "type": "uint40", "internalType": "uint40" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "addReward",
+    "inputs": [
+      { "name": "_rewardamount", "type": "uint256", "internalType": "uint256" },
+      { "name": "startTime", "type": "uint40", "internalType": "uint40" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "addVaultToMarket",
+    "inputs": [
+      { "name": "_marketId", "type": "uint256", "internalType": "uint256" },
+      { "name": "_vault", "type": "address", "internalType": "address" }
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
@@ -36,14 +89,66 @@
   },
   {
     "type": "function",
+    "name": "calculateProtocolFees",
+    "inputs": [
+      { "name": "amount", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [
+      { "name": "fee", "type": "uint256", "internalType": "uint256" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "claimReward",
+    "inputs": [
+      { "name": "rewardId", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "createMarket",
     "inputs": [
       { "name": "_marketName", "type": "string", "internalType": "string" },
       { "name": "_duration", "type": "uint256", "internalType": "uint256" },
-      { "name": "_reward", "type": "uint256", "internalType": "uint256" }
+      { "name": "_rewards", "type": "uint256", "internalType": "uint256" }
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createRequestedMarket",
+    "inputs": [
+      { "name": "_requestId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "feeReceiver",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "feerange",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getActivityCount",
+    "inputs": [],
+    "outputs": [
+      { "name": "_count", "type": "uint256", "internalType": "uint256" }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -55,11 +160,19 @@
       {
         "name": "",
         "type": "tuple[]",
-        "internalType": "struct MArketPlace.Files[]",
+        "internalType": "struct MarketPlace.Files[]",
         "components": [
           { "name": "id", "type": "bytes32", "internalType": "bytes32" },
           { "name": "reward", "type": "uint256", "internalType": "uint256" },
-          { "name": "bond", "type": "uint256", "internalType": "uint256" }
+          { "name": "duration", "type": "uint256", "internalType": "uint256" },
+          { "name": "bond", "type": "uint256", "internalType": "uint256" },
+          { "name": "des", "type": "string", "internalType": "string" },
+          { "name": "owner", "type": "address", "internalType": "address" },
+          {
+            "name": "witnessHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          }
         ]
       }
     ],
@@ -75,8 +188,42 @@
       { "name": "", "type": "string", "internalType": "string" },
       { "name": "", "type": "uint256", "internalType": "uint256" },
       { "name": "", "type": "uint256", "internalType": "uint256" },
-      { "name": "", "type": "uint256", "internalType": "uint256" }
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "address[]", "internalType": "address[]" }
     ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getOwnerOf",
+    "inputs": [
+      { "name": "_marketId", "type": "uint256", "internalType": "uint256" },
+      { "name": "id", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getRequests",
+    "inputs": [
+      { "name": "_requestId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [
+      { "name": "", "type": "string", "internalType": "string" },
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "address", "internalType": "address" },
+      { "name": "", "type": "uint256", "internalType": "uint256" },
+      { "name": "", "type": "bool", "internalType": "bool" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getTotalRewards",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
     "stateMutability": "view"
   },
   {
@@ -114,6 +261,20 @@
   },
   {
     "type": "function",
+    "name": "marketRequests",
+    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [
+      { "name": "marketName", "type": "string", "internalType": "string" },
+      { "name": "duration", "type": "uint256", "internalType": "uint256" },
+      { "name": "reward", "type": "uint256", "internalType": "uint256" },
+      { "name": "creator", "type": "address", "internalType": "address" },
+      { "name": "totalDeposits", "type": "uint256", "internalType": "uint256" },
+      { "name": "exists", "type": "bool", "internalType": "bool" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "owner",
     "inputs": [],
     "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
@@ -121,17 +282,41 @@
   },
   {
     "type": "function",
-    "name": "participateAsCreator",
-    "inputs": [
-      { "name": "_marketId", "type": "uint256", "internalType": "uint256" }
-    ],
+    "name": "renounceOwnership",
+    "inputs": [],
     "outputs": [],
-    "stateMutability": "view"
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
-    "name": "renounceOwnership",
-    "inputs": [],
+    "name": "requestMarketCreation",
+    "inputs": [
+      { "name": "_marketName", "type": "string", "internalType": "string" },
+      { "name": "_duration", "type": "uint256", "internalType": "uint256" },
+      { "name": "_rewards", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setFeeRange",
+    "inputs": [
+      { "name": "_newRange", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setFeeReceiver",
+    "inputs": [
+      {
+        "name": "_newFeeReceiver",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -155,9 +340,83 @@
       { "name": "amount", "type": "uint256", "internalType": "uint256" },
       { "name": "lockEndTime", "type": "uint256", "internalType": "uint256" },
       { "name": "bond", "type": "uint256", "internalType": "uint256" },
-      { "name": "exists", "type": "bool", "internalType": "bool" }
+      { "name": "exists", "type": "bool", "internalType": "bool" },
+      { "name": "description", "type": "string", "internalType": "string" }
     ],
     "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "withdrawProtocolFees",
+    "inputs": [
+      { "name": "_amount", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "withdrawShare",
+    "inputs": [
+      {
+        "name": "_amountTowithdraw",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      { "name": "_marketId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "Bought",
+    "inputs": [
+      {
+        "name": "person",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "owner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "marketId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "FeeReceiverUpdated",
+    "inputs": [
+      {
+        "name": "oldAddress",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newAddress",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
   },
   {
     "type": "event",

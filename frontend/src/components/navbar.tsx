@@ -5,10 +5,7 @@ import { Button } from '@/components/ui/button';
 import {
    HardDriveIcon,
    MenuIcon,
-   Bot,
-   Shield,
-   Wallet,
-   Lock,
+   Link,
 } from 'lucide-react';
 import {
    DropdownMenu,
@@ -21,19 +18,13 @@ import {
    NavigationMenu,
 } from '@/components/ui/navigation-menu';
 import { useEffect, useState } from 'react';
-import { isInstalled, getAddress, GetAddressResponse } from '@gemwallet/api';
+// import { GetAddressResponse } from '@gemwallet/api';
+import { ConnectButton } from '@particle-network/connectkit';
+import { useSelector } from 'react-redux';
 
 export default function Navbar() {
    // const { user } = useStore();
-   const { user } = { user: { address: "" } };
-   const [address, setAddress] = useState<GetAddressResponse | null>()
-   async function getAddr() {
-      if (await isInstalled()) {
-         const addr = await getAddress()
-         setAddress(addr)
-      }
-   }
-   console.log(address)
+   const user = useSelector((state) => state.account)
 
    useEffect(() => {
       // async function getAddr() {
@@ -45,63 +36,63 @@ export default function Navbar() {
       // getAddr()
    }, [])
 
-   const features = [
-      {
-         title: "AI Agents",
-         href: "/ai-agents",
-         description: "Intelligent agents for content analysis and optimization",
-         icon: Bot,
-      },
-      {
-         title: "Zero Knowledge",
-         href: "/security/zero-knowledge",
-         description: "Privacy-preserving computations and verification",
-         icon: Lock,
-      },
-      {
-         title: "Blockchain",
-         href: "/blockchain",
-         description: "Decentralized storage and smart contracts",
-         icon: Wallet,
-      },
-      {
-         title: "Security",
-         href: "/security",
-         description: "Advanced security features and monitoring",
-         icon: Shield,
-      },
-   ];
+   // const features = [
+   //    {
+   //       title: "AI Agents",
+   //       href: "/ai-agents",
+   //       description: "Intelligent agents for content analysis and optimization",
+   //       icon: Bot,
+   //    },
+   //    {
+   //       title: "Zero Knowledge",
+   //       href: "/security/zero-knowledge",
+   //       description: "Privacy-preserving computations and verification",
+   //       icon: Lock,
+   //    },
+   //    {
+   //       title: "Blockchain",
+   //       href: "/blockchain",
+   //       description: "Decentralized storage and smart contracts",
+   //       icon: Wallet,
+   //    },
+   //    {
+   //       title: "Security",
+   //       href: "/security",
+   //       description: "Advanced security features and monitoring",
+   //       icon: Shield,
+   //    },
+   // ];
 
-   const resources = [
-      {
-         title: "Documentation",
-         href: "/docs",
-         description: "Detailed guides and API references",
-      },
-      {
-         title: "Community",
-         href: "/community",
-         description: "Join our growing community",
-      },
-      {
-         title: "Blog",
-         href: "/blog",
-         description: "Latest updates and articles",
-      },
-      {
-         title: "Support",
-         href: "/support",
-         description: "Get help from our team",
-      },
-   ];
+   // const resources = [
+   //    {
+   //       title: "Documentation",
+   //       href: "/docs",
+   //       description: "Detailed guides and API references",
+   //    },
+   //    {
+   //       title: "Community",
+   //       href: "/community",
+   //       description: "Join our growing community",
+   //    },
+   //    {
+   //       title: "Blog",
+   //       href: "/blog",
+   //       description: "Latest updates and articles",
+   //    },
+   //    {
+   //       title: "Support",
+   //       href: "/support",
+   //       description: "Get help from our team",
+   //    },
+   // ];
 
    return (
       <nav className="border-b bg-transparent backdrop-blur-sm sticky top-0 z-50 px-10 border-b-white/40">
          <div className="container flex h-16 items-center px-4 justify-between">
-            <a href="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2">
                <HardDriveIcon className="h-6 w-6 text-primary" />
                <span className="font-bold gradient-text">OnchainVault</span>
-            </a>
+            </Link>
             {/* 
             <div className="flex-1 px-4">
                <div className="relative max-w-md">
@@ -116,7 +107,8 @@ export default function Navbar() {
             <div className="hidden md:flex md:items-center md:space-x-4">
                <NavigationMenu>
                </NavigationMenu>
-               <Button onClick={getAddr}> Connect Wallet</Button>
+               {/* <Button onClick={getAddr}> Connect Wallet</Button> */}
+               <ConnectButton />
             </div>
 
             <div className="md:hidden flex items-center space-x-2">
@@ -130,7 +122,7 @@ export default function Navbar() {
                      <DropdownMenuItem asChild>
                         <a href="/explore">Explore</a>
                      </DropdownMenuItem>
-                     {address ? (
+                     {user.exists ? (
                         <>
                            <DropdownMenuItem asChild>
                               <a href="/dashboard">Dashboard</a>
@@ -149,7 +141,8 @@ export default function Navbar() {
                            </DropdownMenuItem>
                         </>
                      ) : (
-                        <DropdownMenuItem onClick={getAddr}>Connect Wallet</DropdownMenuItem>
+                        // <DropdownMenuItem onClick={getAddr}>Connect Wallet</DropdownMenuItem>
+                        <ConnectButton />
                      )}
                   </DropdownMenuContent>
                </DropdownMenu>

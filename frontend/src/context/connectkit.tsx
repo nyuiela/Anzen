@@ -2,7 +2,7 @@
 
 import { ConnectKitProvider, createConfig } from '@particle-network/connectkit';
 import { authWalletConnectors } from '@particle-network/connectkit/auth';
-import { mainnet, solana } from '@particle-network/connectkit/chains';
+import { solana, xrplevmDevnet } from '@particle-network/connectkit/chains';
 import { evmWalletConnectors } from '@particle-network/connectkit/evm';
 import { injected as solaInjected, solanaWalletConnectors } from '@particle-network/connectkit/solana';
 import { wallet, EntryPosition } from '@particle-network/connectkit/wallet';
@@ -77,7 +77,7 @@ const config = createConfig({
          },
       }),
    ],
-   chains: [mainnet, solana],
+   chains: [solana, xrplevmDevnet],
 });
 
 // Export ConnectKitProvider to be used within your index or layout file (or use createConfig directly within those files).

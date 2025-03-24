@@ -272,7 +272,6 @@ contract MarketPlace is Ownable, ReentrancyGuard {
 
     function activity() internal returns (uint256 count) {
         count = nonce++;
-
         activityCount[msg.sender];
     }
 
