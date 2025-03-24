@@ -11,6 +11,7 @@ import { VaultTable } from '@/components/cards/vaultTable';
 import { VaultGroupDialog } from '@/components/vaultGroup';
 import { GroupDialog } from '@/components/groupDialog';
 import { useSelector } from 'react-redux';
+import { StoreFileDialog } from '@/components/storeFileDialog';
 
 export default function Dashboard() {
    const user = useSelector((state) => state.account.account)
@@ -76,6 +77,7 @@ export default function Dashboard() {
                   <h2 className="text-3xl font-bold">Your Vaults</h2>
                   {/* <VaultDialog /> */}
                   {/* <DropdownVault /> */}
+                  <StoreFileDialog vault={"0xb1e5553c6d03FBE96597253FE2407dc95D61f1B5"} />
                   <GroupDialog />
                   <VaultDialog />
                   <VaultGroupDialog />

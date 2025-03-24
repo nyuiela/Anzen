@@ -16,7 +16,8 @@ contract DataStructure {
         string name;
         bytes32 id;
         address owner;
-        bytes32 swarmHashEncrypted;
+        bytes32 hashEncrypted;
+        string referenceId;
         MetaData metadata;
     }
 

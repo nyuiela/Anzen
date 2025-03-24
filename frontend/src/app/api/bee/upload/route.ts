@@ -27,6 +27,7 @@ export async function POST(req: Request) {
       return NextResponse.json({
          success: "true",
          fileName: file.name,
+         witnessHash: "ox",
          postageBatchId: postageBatchId,
          data: result,
       }, { status: 200 })

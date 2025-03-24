@@ -15,9 +15,14 @@
     "inputs": [
       { "name": "_name", "type": "string[]", "internalType": "string[]" },
       {
-        "name": "_swarmHashEncrypted",
+        "name": "_hashEncrypted",
         "type": "bytes32[]",
         "internalType": "bytes32[]"
+      },
+      {
+        "name": "_referenceId",
+        "type": "string[]",
+        "internalType": "string[]"
       },
       {
         "name": "_metadata",
@@ -67,10 +72,11 @@
           { "name": "id", "type": "bytes32", "internalType": "bytes32" },
           { "name": "owner", "type": "address", "internalType": "address" },
           {
-            "name": "swarmHashEncrypted",
+            "name": "hashEncrypted",
             "type": "bytes32",
             "internalType": "bytes32"
           },
+          { "name": "referenceId", "type": "string", "internalType": "string" },
           {
             "name": "metadata",
             "type": "tuple",
@@ -125,10 +131,11 @@
           { "name": "id", "type": "bytes32", "internalType": "bytes32" },
           { "name": "owner", "type": "address", "internalType": "address" },
           {
-            "name": "swarmHashEncrypted",
+            "name": "hashEncrypted",
             "type": "bytes32",
             "internalType": "bytes32"
           },
+          { "name": "referenceId", "type": "string", "internalType": "string" },
           {
             "name": "metadata",
             "type": "tuple",
@@ -228,7 +235,7 @@
     "inputs": [
       { "name": "_name", "type": "string", "internalType": "string" },
       {
-        "name": "_swarmHashEncrypted",
+        "name": "_hashEncrypted",
         "type": "bytes32",
         "internalType": "bytes32"
       },
@@ -248,7 +255,8 @@
             "internalType": "uint256"
           }
         ]
-      }
+      },
+      { "name": "_referenceId", "type": "string", "internalType": "string" }
     ],
     "outputs": [
       { "name": "_id", "type": "bytes32", "internalType": "bytes32" }

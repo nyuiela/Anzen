@@ -46,16 +46,20 @@ contract Vault is DataStructure, OwnableUpgradeable {
 
     function store(
         string memory _name,
-        /*bytes32 _id,*/ bytes32 _swarmHashEncrypted,
-        MetaData memory _metadata
+        /*bytes32 _id,*/ bytes32 _hashEncrypted,
+        MetaData memory _metadata,
+        string calldata _referenceId
     ) public onlyOwner returns (bytes32 _id) {
         _metadata = MetaData({dateUploaded: block.timestamp, lastModified: 0});
-        _id = keccak256(abi.encodePacked(_name, _swarmHashEncrypted)); // vulnerable to attack
+        _id = keccak256(
+            abi.encodePacked(_name, _hashEncrypted, block.timestamp)
+        ); // vulnerable to attack
         file[_id] = File({
             name: _name,
             id: _id,
             owner: msg.sender,
-            swarmHashEncrypted: _swarmHashEncrypted,
+            hashEncrypted: _hashEncrypted,
+            referenceId: _referenceId,
             metadata: _metadata
         });
         metadata.files += 1;
@@ -64,11 +68,12 @@ contract Vault is DataStructure, OwnableUpgradeable {
 
     function batchStore(
         string[] memory _name,
-        /*bytes32 _id,*/ bytes32[] calldata _swarmHashEncrypted,
+        /*bytes32 _id,*/ bytes32[] calldata _hashEncrypted,
+        string[] calldata _referenceId,
         MetaData calldata _metadata
     ) external onlyOwner {
-        for (uint256 i = 0; i < _swarmHashEncrypted.length; i++) {
-            store(_name[i], _swarmHashEncrypted[i], _metadata);
+        for (uint256 i = 0; i < _hashEncrypted.length; i++) {
+            store(_name[i], _hashEncrypted[i], _metadata, _referenceId[i]);
         }
     }
 
@@ -148,6 +153,7 @@ contract Vault is DataStructure, OwnableUpgradeable {
             "",
             msg.sender,
             "",
+            "",
             MetaData(block.timestamp, block.timestamp)
         );
         return fl;
@@ -172,6 +178,7 @@ contract Vault is DataStructure, OwnableUpgradeable {
             "",
             "",
             msg.sender,
+            "",
             "",
             MetaData(block.timestamp, block.timestamp)
         );
