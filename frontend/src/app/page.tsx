@@ -1,17 +1,17 @@
 "use client"
-
-import ImageTrail from '@/components/imageTrail';
+import ImageTrail from '@/components/ImageTrail';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Shield, Lock, Share2 } from 'lucide-react';
 import Navbar from '@/components/navbar';
 import Aurora from '@/components/aurora';
-// import { useRouter } from 'next/navigation';
-// import { ConnectButton, useAccount } from '@particle-network/connectkit';
 import { useEffect, useState } from 'react';
 import { ConnectDialog } from '@/components/connectDialog';
-import { isInstalled, getAddress } from "@gemwallet/api";
-
+import Link from 'next/link';
+import { useAccount } from '@particle-network/connectkit';
+import { entry } from '@/backend/web3';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAccount } from '@/context/redux/accountSlice';
 
 export default function Home() {
    const key = ''
@@ -19,21 +19,31 @@ export default function Home() {
       owner: "",
       exists: false
    })
+   const user = useSelector((state) => state.account)
+   console.log("User : ", user)
 
+   const account = useAccount()
+   const dispatch = useDispatch()
 
-   // const router = useRouter()
-   // const account = useAccount()
-   // const started = () => {
-   // return account.isConnected ? router.push("/dasboard") : <ConnectButton />
-   // }
    useEffect(() => {
       async function getProfile() {
-         // const profile = await entry.methods.getProfile().call({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
-         // console.log(profile);
-         // setProfile(profile)
+         console.log("entry profile ", account.address)
+         const profile = await entry.methods.getProfile().call({ from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" })
+         const newProfile = {
+            exists: Boolean(profile.exists),
+            tokenId: Number(profile.tokenId),
+            privacy: Number(profile.privacy),
+            username: profile.username,
+            vaults: profile.vaults,
+            owner: profile.owner
+         }
+         if (profile.exists) {
+            dispatch(setAccount(newProfile))
+         }
+         setProfile(profile)
       }
       getProfile()
-   }, [])
+   }, [account.address, dispatch])
    return (
       <div className="min-h-screen bg-background flex flex-col">
          <Aurora
@@ -79,7 +89,7 @@ export default function Home() {
                      <div className="mt-8 flex gap-4">
                         {!profile.exists && <ConnectDialog />}
                         <Button size="lg" variant="outline" asChild>
-                           <a href="/dashboard">Explore Files</a>
+                           <Link href="/dashboard">Explore Files</Link>
                         </Button>
                      </div>
                   </motion.div>

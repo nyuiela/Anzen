@@ -2,13 +2,16 @@
 pragma solidity 0.8.28;
 import "./dataStructures/DataStructure.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract Vault is DataStructure, Ownable {
-    address private owner;
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol"; // Changed
 
-    constructor(address _owner) Ownable(_owner) {
-        owner = _owner;
-    }
+contract Vault is DataStructure, OwnableUpgradeable {
+    //  address private owner;
+
+    //  constructor() {
+    //      //   owner = _owner;
+    //  }
 
     mapping(bytes32 => File) private file;
     enum GetStatus {
@@ -21,31 +24,56 @@ contract Vault is DataStructure, Ownable {
         GetStatus getStatus;
     }
     mapping(bytes32 => AccessCode[]) private accessCodes;
+    struct Metadata {
+        string name;
+        uint256 dateCreated;
+        uint256 files;
+        uint256 folders;
+    }
+    Metadata public metadata;
+
+    function getMetadata() external view returns (string memory) {
+        return metadata.name;
+    }
+
+    function initialize(
+        address _owner,
+        string calldata _name
+    ) external initializer {
+        metadata = Metadata(_name, block.timestamp, 0, 0);
+        __Ownable_init(_owner);
+    }
 
     function store(
         string memory _name,
-        /*bytes32 _id,*/ bytes32 _swarmHashEncrypted,
-        MetaData memory _metadata
-    ) public onlyOwner {
+        /*bytes32 _id,*/ bytes32 _hashEncrypted,
+        MetaData memory _metadata,
+        string calldata _referenceId
+    ) public onlyOwner returns (bytes32 _id) {
         _metadata = MetaData({dateUploaded: block.timestamp, lastModified: 0});
-        bytes32 _id = keccak256(abi.encodePacked(_name, _swarmHashEncrypted));
+        _id = keccak256(
+            abi.encodePacked(_name, _hashEncrypted, block.timestamp)
+        ); // vulnerable to attack
         file[_id] = File({
             name: _name,
             id: _id,
             owner: msg.sender,
-            swarmHashEncrypted: _swarmHashEncrypted,
+            hashEncrypted: _hashEncrypted,
+            referenceId: _referenceId,
             metadata: _metadata
         });
+        metadata.files += 1;
         // emit an event for store, backend grabs the reference , and hashes it.......we need a uinque root to decypher the hash
     }
 
     function batchStore(
         string[] memory _name,
-        /*bytes32 _id,*/ bytes32[] calldata _swarmHashEncrypted,
+        /*bytes32 _id,*/ bytes32[] calldata _hashEncrypted,
+        string[] calldata _referenceId,
         MetaData calldata _metadata
     ) external onlyOwner {
-        for (uint256 i = 0; i < _swarmHashEncrypted.length; i++) {
-            store(_name[i], _swarmHashEncrypted[i], _metadata);
+        for (uint256 i = 0; i < _hashEncrypted.length; i++) {
+            store(_name[i], _hashEncrypted[i], _metadata, _referenceId[i]);
         }
     }
 
@@ -71,6 +99,7 @@ contract Vault is DataStructure, Ownable {
             owner: msg.sender
             // exist : true
         });
+        metadata.folders += 1;
     }
 
     function addFileToFolder(
@@ -105,7 +134,7 @@ contract Vault is DataStructure, Ownable {
     function download(
         bytes32 _fileId,
         bytes32 _accessCode /* onlyOwner / authorized */
-    ) external returns (File memory) {
+    ) external view returns (File memory) {
         for (uint256 i = 0; i < accessCodes[_fileId].length; i++) {
             if (accessCodes[_fileId][i].accesscode == _accessCode) {
                 require(
@@ -119,6 +148,15 @@ contract Vault is DataStructure, Ownable {
                 return file[_fileId];
             }
         }
+        File memory fl = File(
+            "",
+            "",
+            msg.sender,
+            "",
+            "",
+            MetaData(block.timestamp, block.timestamp)
+        );
+        return fl;
     }
 
     // function listVaults()
@@ -136,6 +174,15 @@ contract Vault is DataStructure, Ownable {
                 return file[_fileId];
             }
         }
+        File memory fl = File(
+            "",
+            "",
+            msg.sender,
+            "",
+            "",
+            MetaData(block.timestamp, block.timestamp)
+        );
+        return fl;
     }
 
     //  function getFolder() external /* onlyOwner / authorized */ {
@@ -156,9 +203,8 @@ contract Vault is DataStructure, Ownable {
         }
     }
 
-
-// we might ditch this step here, seems unless to me
-// okay we will use the hash , file id, status to rehash it again , that will be what will be given to buyers or people who have to pay first
+    // we might ditch this step here, seems unless to me
+    // okay we will use the hash , file id, status to rehash it again , that will be what will be given to buyers or people who have to pay first
 
     function generateAccessCode(
         bytes32 _fileId,

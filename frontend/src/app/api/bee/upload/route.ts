@@ -21,8 +21,8 @@ export async function POST(req: Request) {
 
       // Save the file to the 'public/uploads' directory
 
-      // const postageBatchId = await bee.createPostageBatch("17463640064", 17)
-      // const result = await bee.uploadFile(postageBatchId, file, file.name)
+      const postageBatchId = await bee.createPostageBatch("17463640064", 17)
+      const result = await bee.uploadFile(postageBatchId, file, file.name)
       // console.log(result)
 
 
@@ -40,8 +40,9 @@ export async function POST(req: Request) {
       return NextResponse.json({
          success: "true",
          fileName: file.name,
-         // postageBatchId: postageBatchId,
-         // data: result,
+         witnessHash: "ox",
+         postageBatchId: postageBatchId,
+         data: result,
       }, { status: 200 })
    } catch (error) {
       console.log(error)

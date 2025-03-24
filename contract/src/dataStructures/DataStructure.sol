@@ -7,14 +7,17 @@ contract DataStructure {
         string username;
         uint256 tokenId; // nftProfile id.
         address owner;
+        bool exists;
         address[] vaults;
+        Privacy privacy;
     }
 
     struct File {
         string name;
         bytes32 id;
         address owner;
-        bytes32 swarmHashEncrypted;
+        bytes32 hashEncrypted;
+        string referenceId;
         MetaData metadata;
     }
 
@@ -44,6 +47,18 @@ contract DataStructure {
         //string name;
         uint256 dateUploaded;
         uint256 lastModified;
+    }
+    enum Privacy {
+        PUBLIC,
+        PRIVATE
+    }
+
+    struct CreateGroup {
+        string name;
+        address[] members;
+        uint256 tokenId;
+        address[] vaults;
+        Privacy privacy;
     }
 
     //mapping(fileId => accessToken) private access;

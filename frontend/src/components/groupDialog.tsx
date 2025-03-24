@@ -38,7 +38,10 @@ export function GroupDialog() {
    async function click() {
       let members = value.members.split(",");
       console.log(members)
-      await entry.methods.createGroup(value.name, members, value.tokenId, value.privacy).send({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+      const txReceipt = await entry.methods.createGroup(value.name, members, value.tokenId, value.privacy).send({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+      console.log(txReceipt)
+      const groupId = await txReceipt.events.GroupCreated.returnValues.id;
+      console.log("GroupId: ", groupId)
    }
 
 
@@ -108,7 +111,7 @@ export function GroupDialog() {
 
             </div>
             <DialogFooter>
-               <CustomButton label="Create Vault" click={click} />
+               <CustomButton label="Create Group" click={click} />
             </DialogFooter>
          </DialogContent>
       </Dialog>

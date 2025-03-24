@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
-import { ParticleConnectkit } from "@/context/Connectkit";
-import Aurora from "@/components/aurora";
 import Footer from "@/components/footer";
+import ReduxProvider from "@/context/redux/reduxProvider";
+import { ParticleConnectkit } from "@/context/connectkit";
 
 const geistSans = localFont({
    src: "./fonts/GeistVF.woff",
@@ -32,24 +32,27 @@ export default function RootLayout({
          <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
          >
-            <ThemeProvider
-               attribute="class"
-               defaultTheme="system"
-               enableSystem
-               disableTransitionOnChange
-            >
-               {/* <ParticleConnectkit> */}
+            <ReduxProvider>
 
-               {/* <Aurora
+               <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                  disableTransitionOnChange
+               >
+                  <ParticleConnectkit>
+
+                     {/* <Aurora
                      colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
                      speed={0.2}
-                  /> */}
+                     /> */}
 
+                     {children}
+                     <Footer />
+                  </ParticleConnectkit>
+               </ThemeProvider>
+            </ReduxProvider>
 
-               {children}
-               <Footer />
-               {/* </ParticleConnectkit> */}
-            </ThemeProvider>
 
          </body>
       </html>

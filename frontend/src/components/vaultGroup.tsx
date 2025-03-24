@@ -13,21 +13,32 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import CustomButton from "./customButton"
-import { factory } from "@/backend/web3"
+import { entry, factory } from "@/backend/web3"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 
 
 export function VaultGroupDialog() {
    const [value, setValue] = useState({
-      name: ""
+      name: "",
+      id: 0
    })
    const handleChange = (e: any) => {
       setValue((value: any) => ({ ...value, [e.target.name]: e.target.value }))
    }
 
    async function click() {
+      const txReceipt = await factory.methods.createVault('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', value.name)
+         // .send()
+         .send({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+      console.log(txReceipt)
+      const vaultAddress = txReceipt.events.VaultCreated.returnValues.clone;
+      console.log("Vault Address:", vaultAddress);
 
-      await factory.methods.createVault(value.name).send({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+      // console.log("Vault Address ", vaultAddress)
+      const added = await entry.methods.addVaultToGroup(value.id, vaultAddress).send({
+         from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+      })
+      console.log(added)
    }
 
 
@@ -53,26 +64,19 @@ export function VaultGroupDialog() {
                   Welcome
                </DialogDescription>
             </DialogHeader>
-            <div className="grid grid-cols-4 items-center gap-4">
-               <Label htmlFor="username" className="text-right">
-                  Privacy
-               </Label>
-               <Select name="username" onValueChange={handleSelectChange}>
-                  <SelectTrigger className="w-[180px]">
-                     <SelectValue placeholder="Select Group" />
-                  </SelectTrigger>
-                  <SelectContent >
-                     <SelectItem value="0">Group 1</SelectItem>
-                     <SelectItem value="1">Group 2</SelectItem>
-                     {/* <SelectItem value="system">System</SelectItem> */}
-                  </SelectContent>
-               </Select>
+            <div className="grid gap-4 py-4">
+               <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                     Group Id
+                  </Label>
+                  <Input id="id" name="id" placeholder={"1"} onChange={(e) => handleChange(e)} className="col-span-3" />
+               </div>
 
             </div>
             <div className="grid gap-4 py-4">
                <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-right">
-                     Name
+                     Vault Name
                   </Label>
                   <Input id="name" name="name" placeholder={"kaleel"} onChange={(e) => handleChange(e)} className="col-span-3" />
                </div>

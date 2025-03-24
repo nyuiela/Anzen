@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 
-import "./ImageTrail.css";
+import "./imageTrail.css";
 
 function lerp(a, b, n) {
   return (1 - n) * a + n * b;

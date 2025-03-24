@@ -44,4 +44,9 @@ contract ProfileImageNfts is ERC721, Ownable {
 
         return newId;
     }
+
+    function isOwnerOFToken(uint256 tokenId) public view returns (bool) {
+        address _owner = ownerOf(tokenId);
+        return _owner == msg.sender;
+    }
 }

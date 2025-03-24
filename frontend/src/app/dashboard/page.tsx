@@ -1,57 +1,32 @@
 "use client"
 import { motion } from 'framer-motion';
-import { useStore } from '@/lib/store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Lock, Users, Eye } from 'lucide-react';
-import FileGrid from '@/components/files/FileGrid';
 import Navbar from '@/components/navbar';
-import CircularGallery from '@/components/CircularGallery'
 import { VaultDialog } from '@/components/vaultDialog';
-import CustomButton from '@/components/customButton';
-import { entry, factory, vault } from '@/backend/web3';
-import { DropdownVault } from '@/components/cards/dropdownVault';
-import { ConnectDialog } from '@/components/connectDialog';
+// import { factory } from '@/backend/web3';
 import { useEffect, useState } from 'react';
 import { VaultTable } from '@/components/cards/vaultTable';
 import { VaultGroupDialog } from '@/components/vaultGroup';
 import { GroupDialog } from '@/components/groupDialog';
+import { useSelector } from 'react-redux';
+import { StoreFileDialog } from '@/components/storeFileDialog';
 
 export default function Dashboard() {
-   // const { files } = useStore();
-   const [profile, setProfile] = useState({
-      vaults: []
-   })
+   const user = useSelector((state) => state.account.account)
+   // const [profile, setProfile] = useState(user);
+   // const click = async () => {
+   //    await factory.methods.createVault().call({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
+   // }
 
-   // const privateFiles = files.filter((f) => f.privacy === 'private');
-   // const sharedFiles = files.filter((f) => f.privacy === 'shared');
-   // const publicFiles = files.filter((f) => f.privacy === 'public');
-   const click = async () => {
-      await factory.methods.createVault().call({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
-   }
-
+   console.log(user)
    useEffect(() => {
       async function getVaults() {
-         const profile = await entry.methods.getProfile().call({ from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" })
-         setProfile(profile);
-         // profile.vaults.map((item) => items.push({
-         //    image: "`https://picsum.photos/seed/1/800/600?grayscale`",
-         //    text: item,
-         // }));
+         console.log(user)
       }
       getVaults()
-   }, [])
-   // files = profile.vaults;
-   // const items = profile.vaults;
-   console.log(profile)
-   // {
-   //    image: `https://picsum.photos/seed/1/800/600?grayscale`,
-   //    text: "Bridge",
-   // },
-   // {
-   //    image: `https://picsum.photos/seed/2/800/600?grayscale`,
-   //    text: "Desk Setup",
-   // }
+   }, [user])
 
    return (
       <div className="min-h-screen bg-background flex flex-col z-[10]">
@@ -102,6 +77,7 @@ export default function Dashboard() {
                   <h2 className="text-3xl font-bold">Your Vaults</h2>
                   {/* <VaultDialog /> */}
                   {/* <DropdownVault /> */}
+                  <StoreFileDialog vault={"0xb1e5553c6d03FBE96597253FE2407dc95D61f1B5"} />
                   <GroupDialog />
                   <VaultDialog />
                   <VaultGroupDialog />
@@ -117,7 +93,9 @@ export default function Dashboard() {
                      <TabsTrigger value="public">Public</TabsTrigger>
                   </TabsList> */}
                   <TabsContent value="all">
-                     <VaultTable address={profile.vaults} />
+                     {user.vaults &&
+                        <VaultTable address={user.vaults} />
+                     }
                   </TabsContent>
                   {/* <TabsContent value="private">
                      <FileGrid files={privateFiles} />

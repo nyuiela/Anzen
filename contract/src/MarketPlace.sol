@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract MArketPlace is Ownable, ReentrancyGuard {
+contract MarketPlace is Ownable, ReentrancyGuard {
     IERC20 quoteAsset;
+    IERC20 rewardToken;
     uint256 public marketCount;
     mapping(uint256 => mapping(address => UserPosition)) public userPositions;
     event MarketCreated(
@@ -30,9 +31,11 @@ contract MArketPlace is Ownable, ReentrancyGuard {
         bytes32 id;
         uint256 reward /**bond */;
         // uint256 lockperiod;
+        uint256 duration;
         uint256 bond;
         string des;
         address owner;
+        bytes32 witnessHash;
     }
 
     struct UserPosition {
@@ -49,72 +52,93 @@ contract MArketPlace is Ownable, ReentrancyGuard {
 
     constructor(
         address initialOwner,
-        address quoteAssetAddress,
-        address
+        address quoteAssetAddress
     ) Ownable(initialOwner) {
         //raacToken = IERC20(_raacToken);
         // decrvUSDToken = IERC20(_decrvUSDToken);
         quoteAsset = IERC20(quoteAssetAddress);
     }
 
-struct MarketRequest {
-    string marketName;
-    uint256 duration;
-    uint256 reward;
-    address creator;
-    uint256 totalDeposits;
-    bool exists;
-}
-mapping(uint256 => MarketRequest) public marketRequests;
+    struct MarketRequest {
+        string marketName;
+        uint256 duration;
+        uint256 reward;
+        address creator;
+        uint256 totalDeposits;
+        bool exists;
+    }
+    mapping(uint256 => MarketRequest) public marketRequests;
 
-function requestMarketCreation( string memory _marketName,
+    function requestMarketCreation(
+        string memory _marketName,
         uint256 _duration,
-        uint256 _reward) external {
-            // make sure the martket does not exist
-            uint256 RId = keccak256(abi.encodePacked(_marketName));
-
-       // MarketRequest storage request = marketRequests[msg.sender];   
-        marketRequests[RId] = MarketRequest({
+        uint256 _rewards
+    ) external {
+        // make sure the martket does not exist
+        bytes32 rId = keccak256(abi.encodePacked(_marketName));
+        uint256 id = uint256(rId);
+        // MarketRequest storage request = marketRequests[msg.sender];
+        marketRequests[id] = MarketRequest({
             marketName: _marketName,
             duration: _duration,
-            reward: _reward,
+            reward: _rewards,
             creator: msg.sender,
             totalDeposits: 0,
             exists: true
-        }); 
+        });
+    }
 
-}
+    function getRequests(
+        uint256 _requestId
+    )
+        public
+        view
+        returns (string memory, uint256, uint256, address, uint256, bool)
+    {
+        MarketRequest memory request = marketRequests[_requestId];
 
-function getRequestion(uint256 _requestId) external view returns (string memory, uint256, uint256, address, uint256, bool) {
-MarketRequest memory request = marketRequests[_requestId];
-
-return (request.marketName, request.duration, request.reward, request.creator, request.totalDeposits, request.exists);
-}
-
-function createRequestedMarket(uint256 _requestId) external onlyOwner {
-   (string memory _marketName, uint256 _duration, uint256 _reward) = getRequestion(_requestId);
-    
-    marketRequests[_requestId].exists = false;
-    marketRequests[_requestId].delete;
-
-    createMarket(_marketName, _duration, _reward);
-}
+        return (
+            request.marketName,
+            request.duration,
+            request.reward,
+            request.creator,
+            request.totalDeposits,
+            request.exists
+        );
+    }
 
     function createMarket(
         string memory _marketName,
         uint256 _duration,
-        uint256 _reward
-    ) external onlyOwner {
+        uint256 _rewards
+    ) public onlyOwner {
         marketCount++;
         market[marketCount] = Market({
             marketName: _marketName,
             duration: _duration,
-            reward: _reward,
+            reward: _rewards,
             totalDeposits: 0,
+            files: new bytes32[](0),
             vaults: new address[](0)
         });
 
-        emit MarketCreated(marketCount, _duration, _reward);
+        emit MarketCreated(marketCount, _duration, _rewards);
+    }
+
+    function createRequestedMarket(uint256 _requestId) external {
+        (
+            string memory _marketName,
+            uint256 _duration,
+            uint256 _rewards,
+            ,
+            ,
+
+        ) = getRequests(_requestId);
+
+        marketRequests[_requestId].exists = false;
+        delete marketRequests[_requestId]; // delete?
+
+        createMarket(_marketName, _duration, _rewards);
     }
 
     function getFiles(
@@ -123,7 +147,8 @@ function createRequestedMarket(uint256 _requestId) external onlyOwner {
         return files[_marketId];
     }
 
-uint256 private accumulatedFees;
+    uint256 private accumulatedFees;
+
     //erc20 payment
     //see the file
     // buys, pays the bond
@@ -131,140 +156,237 @@ uint256 private accumulatedFees;
     //should triger a tx for the older of the id, when theoner signs it he receives the moeny , sim the buyer gets the acces code
     function buy(uint256 _marketId, uint256 id) external {
         activity();
-     require ( files[_marketId][id].duration > block.timestamp, "MarketPlace: File is no longer available");
-     Market storage _market = market[_marketId];
+        require(
+            files[_marketId][id].duration > block.timestamp,
+            "MarketPlace: File is no longer available"
+        );
+        Market storage _market = market[_marketId];
 
-         uint256 _amount = files[_marketId][id].bond;
+        uint256 _amount = files[_marketId][id].bond;
 
-        (uint256 fee )= calculateProtocolFee(_amount);
+        uint256 fee = calculateProtocolFees(_amount);
 
         uint256 amountToadd = _amount - fee;
-       accumulatedFee += fee; 
-    _market.totalDeposits += amountToadd;
+        accumulatedFees += fee;
+        _market.totalDeposits += amountToadd;
         //   _market.duration;
-    (address owner)= getOwnerOf(_marketId, id);
-    UserPosition storage position = userPositions[_marketId][msg.sender];
-    uint256 previousamount = position.amount;  
-    position.amount = previousamount + amountToadd;
+        address owner = getOwnerOf(_marketId, id);
+        UserPosition storage position = userPositions[_marketId][owner];
+        uint256 previousamount = position.amount;
+        position.amount = previousamount + amountToadd;
 
-
-        
-     quoteAsset.transferFrom(msg.sender, address(this), _amount);
+        quoteAsset.transferFrom(msg.sender, address(this), _amount);
 
         // after buying each buyer gets a unique access code, they enter it and view or download or whatever it  is
 
         // generate uinque hash aka access code
         // create something like the signature digest or a root to break the has and get the req and give user //
         //aggreed on emitting eent and backend listening in to autorize msg.sender
+        emit Bought(msg.sender, owner, _amount, _marketId);
     }
 
+    event Bought(
+        address indexed person,
+        address indexed owner,
+        uint256 amount,
+        uint256 marketId
+    );
 
-function getOwnerOf(uint256 _marketId, uint256 id) external view returns (address) {
-    return files[_marketId][id].owner;
- 
+    function calculateProtocolFees(
+        uint256 amount
+    ) public view returns (uint256 fee) {
+        // leftamount = amount.mulDiv()
+        fee = (amount * feerange) / BIPS;
+
+        fee == 0 ? WAD : fee;
     }
-    function EnterMarket(bytes32 _id, uint256 _marketId, uint256 _amount, uint256 bond, string memory description) external view {
+
+    uint256 public constant WAD = 1e18;
+
+    function getOwnerOf(
+        uint256 _marketId,
+        uint256 id
+    ) public view returns (address) {
+        return files[_marketId][id].owner;
+    }
+
+    function EnterMarket(
+        bytes32 _id,
+        uint256 _marketId,
+        uint256 _amount,
+        uint256 _duration,
+        uint256 _bond,
+        string memory _description,
+        bytes32 _witnessHash
+    ) external {
         activity();
         Market storage _market = market[_marketId];
         UserPosition storage position = userPositions[_marketId][msg.sender];
-        addTomarket(_id, _marketId, _amount, bond, description);
+        addTomarket(
+            _id,
+            _marketId,
+            _amount,
+            _duration,
+            _bond,
+            _description,
+            _witnessHash
+        ); // why not call it directly?
     }
 
-function addVaultToMarket(uint256 _marketId, address _vault) external {
-     Market storage _market = market[_marketId];
-     _market.vaults.push(_vault);
+    function addVaultToMarket(uint256 _marketId, address _vault) external {
+        Market storage _market = market[_marketId];
+        _market.vaults.push(_vault);
+    }
 
-}
+    function withdrawShare(
+        uint256 _amountTowithdraw,
+        uint256 _marketId
+    ) external {
+        UserPosition storage position = userPositions[_marketId][msg.sender];
 
+        uint256 amountmade = position.amount;
 
-function withdrawShare(uint256 _amountTowithdraw, uint256 _marketId) external {
-      UserPosition storage position = userPositions[_marketId][msg.sender];
+        require(_amountTowithdraw <= amountmade, "MarketPlace_NOt_EnoughFunds");
 
-      uint256 amountmade = position.amount;
+        onWithdraw(_amountTowithdraw, _marketId);
 
-      require(_amountTowithdraw <= amountmade , "MarketPlace_NOt_EnoughFunds");
-      
- 
-     onWithdraw(_amountTowithdraw, _marketId);
+        quoteAsset.transferFrom(address(this), msg.sender, _amountTowithdraw);
+    }
 
-      quote.transferFrom(address(this), msg.sender , _amount);
-       
-}
+    function ensureLiquidity(uint256 _amountTowithdraw) internal view {
+        require(
+            address(this).balance > _amountTowithdraw,
+            "MarketPlace__contact_doest_have_enough_balance"
+        );
+    }
 
-function ensureLiquidity(uint256 _amountTowithdraw) internal {
-     require(address(this).balance > _amountTowithdraw,"MarketPlace__contact_doest_have_enough_balance");
-}
+    function onWithdraw(uint256 amount, uint256 _marketId) internal {
+        ensureLiquidity(amount);
+        Market storage _market = market[_marketId];
+        _market.totalDeposits -= amount;
+    }
 
-function onWithdraw(uint256 amount, _marketId) internal {
-    ensureLiquidity(amount);
-Market storage _market = market[_marketId];
-    _market.totalDeposits -= _amount;
+    uint256 private nonce;
 
-}
+    mapping(address => uint256) private activityCount;
 
-uint256 private nonce;
+    function activity() internal returns (uint256 count) {
+        count = nonce++;
+        activityCount[msg.sender];
+    }
 
-mapping(address => uint256) private activityCount; 
-function activity() internal returns(uint256 count){
+    function getActivityCount() public view returns (uint256 _count) {
+        _count = activityCount[msg.sender];
+    }
 
-    count = nonce++;
+    struct Reward {
+        uint256 rewardamount;
+        uint40 startTime;
+        // uint256 totalReward;
+    }
+    mapping(bytes32 => Reward) public _reward;
+    struct UserRewardInfo {
+        uint256 totalReward;
+        uint256 claimedReward;
+        uint256 lastClaimedTime;
+    }
+    mapping(address => UserRewardInfo) private userRewardInfo;
+    //mapping(address => uint256) private userTorReward;
+    uint256 private accumlatedRewards;
 
-    activityCount[msg.sender][count];
-}
+    function addReward(
+        uint256 _rewardamount,
+        uint40 startTime
+    ) external onlyOwner {
+        require(
+            startTime > block.timestamp,
+            "MarketPlace__Startime_cannot_be_in_the_past"
+        );
+        bytes32 rewardId = keccak256(
+            abi.encodePacked("_rewardamont,startTime")
+        );
+        _reward[rewardId] = Reward({
+            rewardamount: _rewardamount,
+            startTime: startTime
+            // totalReward : _rewardamount
+        });
+        accumlatedRewards += _rewardamount;
+        rewardToken.transferFrom(msg.sender, address(this), _rewardamount);
+    }
 
+    function calculateReward() internal view returns (uint256 reward) {
+        uint256 _count = getActivityCount();
+        require(_count > 0, "MarketPlace__No_Activity");
+        return _count / BIPS;
+    }
 
-function getActivityCount() public view returns(uint256 _count) {
- _count = activityCount[msg.sender][count];
+    function claimReward(bytes32 rewardId) external {
+        _claim(rewardId);
+    }
 
-}
+    function getTotalRewards() public view returns (uint256) {
+        return accumlatedRewards;
+    }
 
-function addReward()external onlyOwner {}
+    function _claim(bytes32 rewardId) internal {
+        _updateReward(rewardId);
+        UserRewardInfo storage _userRewardInfo = userRewardInfo[msg.sender];
+        uint256 _rewards = _userRewardInfo.totalReward;
 
-function calculateReward() internal return(uint256 reward){}
+        accumlatedRewards -= _rewards;
+        rewardToken.transferFrom(address(this), msg.sender, _rewards);
+    }
 
-function claimRward() public {}
+    function _updateReward(bytes32 rewardId) internal {
+        Reward storage reward = _reward[rewardId];
+        UserRewardInfo storage _userRewardInfo = userRewardInfo[msg.sender];
+        require(
+            reward.startTime >= block.timestamp,
+            "MarketPlace__Reward_not_yet_started"
+        );
 
-function calculateProtocolFees(uint256 amount) external view returns(uint256 fee){
+        uint256 _nreward = calculateReward(); // renamed from _nreward
+        _userRewardInfo.totalReward += _nreward; // renamed
+        _userRewardInfo.claimedReward = 0;
+        _userRewardInfo.lastClaimedTime = block.timestamp;
+    }
 
-   // leftamount = amount.mulDiv()
-  fee  = (amount * feerange) / BIPS;
-  
-  fee == 0 ? WAD : fee ; 
+    function withdrawProtocolFees(uint256 _amount) external {
+        uint256 profit = accumulatedFees;
 
-}
+        require(profit >= _amount, "MarketPlace__Not_enough_profit");
 
-function withdrawProtocolFees(uint256 _amount)external {
-    uint256 profit = accumlatedFee;
-    
-    require(profit >= _amount, "MarketPlace__Not_enough_profit");
+        accumulatedFees = profit - _amount;
 
-    accumlatedFee = profit - _amount;
+        require(
+            address(this).balance > _amount,
+            "MarketPlace__contact_doest_have_enough_balance"
+        );
 
-    require(address(this).balance > _amount,"MarketPlace__contact_doest_have_enough_balance");
+        quoteAsset.transferFrom(address(this), feeReceiver, _amount);
+    }
 
-    quote.transferFrom(address(this), feeREceiver, _amount);
- 
-}
+    uint256 public constant BIPS = 10_000;
 
-uint256 public constant BIPS = 10_000;
+    uint256 public constant FeeLimit = 2000;
+    uint256 public feerange;
 
-uint256 public constant FeeLimit = 2000;
-uint256 public feerange;
-function setFeeRange(uint256 _newRange) external {
-    require(_newRanger < FeeLimit, "MarketPLace_canNot_Be_more_Than_limit");
-    feerange = _newRange;
-}
+    function setFeeRange(uint256 _newRange) external {
+        require(_newRange < FeeLimit, "MarketPLace_canNot_Be_more_Than_limit");
+        feerange = _newRange;
+    }
 
-address public feeREceiver = keccak256(abi.encode("feeReceiver"));
-function setFeeReceiver(address _newFeeReceiver) external {
-    feeREceiver = _newFeeReceiver;
-    emit FeeReceiverUpdated(feeReceiver, _newFeeReceiver);
-}
+    address public feeReceiver;
 
-event FeeReceiverUpdated(address indexed oldAddress, address indexed newAddress)
+    function setFeeReceiver(address _newFeeReceiver) external {
+        feeReceiver = _newFeeReceiver;
+        emit FeeReceiverUpdated(feeReceiver, _newFeeReceiver);
+    }
 
-
-
+    event FeeReceiverUpdated(
+        address indexed oldAddress,
+        address indexed newAddress
+    );
 
     //  function participateAsConsumer(uint256 _marketId, address _user) external {
     //    Market storage market = market[_marketId];
@@ -282,13 +404,25 @@ event FeeReceiverUpdated(address indexed oldAddress, address indexed newAddress)
         bytes32 _id,
         uint256 _marketId,
         uint256 _amount,
+        uint256 _duration,
         uint256 _bond,
-        string memory description //   bytes32 accessCode;
+        string memory description, //   bytes32 accessCode;
+        bytes32 _witnessHash
     ) internal {
         UserPosition storage position = userPositions[_marketId][msg.sender];
+        require(_witnessHash != 0, "MarketPlace__WitnessHash_cannot_be_empty");
+
         if (position.exists) {
             files[_marketId].push(
-                Files({id: _id, reward: _amount, bond: _bond, des: description, owner: msg.sender})
+                Files({
+                    id: _id,
+                    reward: _amount,
+                    duration: _duration,
+                    bond: _bond,
+                    des: description,
+                    owner: msg.sender,
+                    witnessHash: _witnessHash
+                })
             );
         } else {
             userPositions[_marketId][msg.sender] = UserPosition(
@@ -300,7 +434,15 @@ event FeeReceiverUpdated(address indexed oldAddress, address indexed newAddress)
                 description
             );
             files[_marketId].push(
-                Files({id: _id, reward: _amount, bond: _bond, des: description, owner: msg.sender})
+                Files({
+                    id: _id,
+                    reward: _amount,
+                    duration: _duration,
+                    bond: _bond,
+                    des: description,
+                    owner: msg.sender,
+                    witnessHash: _witnessHash
+                })
             );
         }
     }
@@ -315,7 +457,11 @@ event FeeReceiverUpdated(address indexed oldAddress, address indexed newAddress)
 
     function getMarketInfo(
         uint256 marketId
-    ) external view returns (string memory, uint256, uint256, uint256, address) {
+    )
+        external
+        view
+        returns (string memory, uint256, uint256, uint256, address[] memory)
+    {
         Market storage _market = market[marketId];
         return (
             // _market.quoteAsset,

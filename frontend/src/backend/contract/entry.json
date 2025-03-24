@@ -23,7 +23,6 @@
     "type": "function",
     "name": "addVaultToUser",
     "inputs": [
-      { "name": "_user", "type": "address", "internalType": "address" },
       { "name": "_vaultAddress", "type": "address", "internalType": "address" }
     ],
     "outputs": [],
@@ -38,7 +37,7 @@
       {
         "name": "_privacy",
         "type": "uint8",
-        "internalType": "enum DataStructure.PRIVACY"
+        "internalType": "enum DataStructure.Privacy"
       }
     ],
     "outputs": [],
@@ -54,7 +53,7 @@
       {
         "name": "_privacy",
         "type": "uint8",
-        "internalType": "enum DataStructure.PRIVACY"
+        "internalType": "enum DataStructure.Privacy"
       }
     ],
     "outputs": [],
@@ -82,7 +81,7 @@
           {
             "name": "privacy",
             "type": "uint8",
-            "internalType": "enum DataStructure.PRIVACY"
+            "internalType": "enum DataStructure.Privacy"
           }
         ]
       }
@@ -132,7 +131,7 @@
       {
         "name": "_privacy",
         "type": "uint8",
-        "internalType": "enum DataStructure.PRIVACY"
+        "internalType": "enum DataStructure.Privacy"
       }
     ],
     "outputs": [],
@@ -150,7 +149,7 @@
       {
         "name": "privacy",
         "type": "uint8",
-        "internalType": "enum DataStructure.PRIVACY"
+        "internalType": "enum DataStructure.Privacy"
       }
     ],
     "stateMutability": "view"
@@ -189,6 +188,31 @@
         "type": "address",
         "indexed": true,
         "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GroupCreated",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "name": "id",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
       }
     ],
     "anonymous": false
