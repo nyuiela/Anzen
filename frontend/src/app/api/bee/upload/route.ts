@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
       const postageBatchId = await bee.createPostageBatch("17463640064", 17)
       const result = await bee.uploadFile(postageBatchId, file, file.name)
-      // console.log(result)
+      console.log(result)
 
 
       // generate witness file
@@ -35,12 +35,18 @@ export async function POST(req: Request) {
             s: "a"
          })
       })
-      const wr = await witnessResponse.arrayBuffer()
-      console.log("wr ", wr)
+      const arrayBuffer = await witnessResponse.arrayBuffer();
+      const hexString = Array.from(new Uint8Array(arrayBuffer), byte => byte.toString(16).padStart(2, '0')).join('');
+      console.log("Hex Witness:", hexString);
+
+      // Convert hex to bytes32 (pad to 64 characters)
+      const witnessHash = `0x${hexString.padEnd(64, '0').slice(0, 64)}`;
+      console.log("Bytes32 Witness:", witnessHash);
+
       return NextResponse.json({
          success: "true",
          fileName: file.name,
-         witnessHash: "ox",
+         witnessHash: witnessHash,
          postageBatchId: postageBatchId,
          data: result,
       }, { status: 200 })

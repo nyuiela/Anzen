@@ -24,6 +24,7 @@ import Web3 from 'web3';
 import vaultAbi from "./vault.json"
 import { Label } from './ui/label';
 import { Input } from './ui/input';
+import { arrayBufferToBytes32 } from '@/lib/utils';
 
 export default function UploadFile({ vault = "" }: { vault: string }) {
    const [uploading, setUploading] = useState(false);
@@ -62,14 +63,15 @@ export default function UploadFile({ vault = "" }: { vault: string }) {
          if (!response.ok) throw new Error("Failed to upload file");
 
          const result = await response.json();
-         console.log("File uploaded successfully:", result.path);
+         console.log("File uploaded successfully:", result);
+         const wr = arrayBufferToBytes32(result.witnessHash)
          const providerRpc = process.env.NEXT_PUBLIC_PROVIDER_RPC as string
          const web3 = new Web3(providerRpc)
          const cvault = new web3.eth.Contract(vaultAbi, vault)
-         const txReceipt = await cvault.methods.store(value.filename, result.witnessHash, {
+         const txReceipt = await cvault.methods.store(value.filename, wr, {
             dateUploaded: Math.floor(Date.now() / 1000),
             lastModified: Math.floor(Date.now() / 1000),
-         }, result.data).send({ from: '' })
+         }, result.data.reference).send({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
          console.log(txReceipt)
 
       } catch (error) {
