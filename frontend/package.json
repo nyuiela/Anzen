@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ethersphere/bee-js": "^8.3.1",
+    "@ethersphere/bee-js": "^6.4.0",
     "@gemwallet/api": "^3.8.0",
     "@hookform/resolvers": "^4.0.0",
-    "@particle-network/connectkit": "^2.0.15",
+    "@particle-network/connectkit": "^1.4.8",
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@radix-ui/react-label": "^2.1.2",
