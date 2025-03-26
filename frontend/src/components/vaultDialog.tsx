@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import CustomButton from "./customButton"
-import { entry, factory, vault } from "@/backend/web3"
+import { entry, factory } from "@/backend/web3"
 import { useSelector } from "react-redux"
 export function VaultDialog() {
    const user = useSelector((state) => state.account);

@@ -17,7 +17,7 @@ import {
 import {
    NavigationMenu,
 } from '@/components/ui/navigation-menu';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 // import { GetAddressResponse } from '@gemwallet/api';
 import { ConnectButton } from '@particle-network/connectkit';
 import { useSelector } from 'react-redux';
@@ -120,7 +120,7 @@ export default function Navbar() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
                      <DropdownMenuItem asChild>
-                        <a href="/explore">Explore</a>
+                        <a href="/marketplace">Explore</a>
                      </DropdownMenuItem>
                      {user.exists ? (
                         <>

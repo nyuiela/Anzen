@@ -18,8 +18,8 @@ declare_circuit!(FileCircuit {
     s: Variable, // secretFileHash: provided by user
 });
 
-impl Define<M31Config> for FileCircuit<Variable> {
-    fn define<Builder: RootAPI<M31Config>>(&self, api: &mut Builder) {
+impl Define<BN254Config> for FileCircuit<Variable> {
+    fn define<Builder: RootAPI<BN254Config>>(&self, api: &mut Builder) {
         let f: Variable = self.f;
         let r: Variable = self.r;
         let s: Variable = self.s;
@@ -38,15 +38,19 @@ pub async fn generate_witness(params: web::Json<WitnessRequest>) -> impl Respond
         .map_err(|e| actix_web::error::ErrorInternalServerError(e))
         .unwrap();
 
+    let file = std::fs::File::create("circuit.txt").unwrap();
+    let writer = std::io::BufWriter::new(file);
+    let _ = compile_result.layered_circuit.serialize_into(writer);
+
     //  let active_compliance = BN254::from(0_u32);
     //  let file_hash: [u8; 32] = compute_sha256_hash_of_file(&params.f).unwrap();
     let file_hash: &[u8; 32] = params.f.as_bytes().try_into().unwrap();
     let r: &[u8; 32] = params.r.as_bytes().try_into().unwrap();
     let s: &[u8; 32] = params.s.as_bytes().try_into().unwrap();
     let assignment = FileCircuit {
-        f: M31::from_uniform_bytes(file_hash),
-        r: M31::from_uniform_bytes(r),
-        s: M31::from_uniform_bytes(s),
+        f: BN254::from_uniform_bytes(file_hash),
+        r: BN254::from_uniform_bytes(r),
+        s: BN254::from_uniform_bytes(s),
     };
     //  assignment.target = BN254::from(params.target);
 

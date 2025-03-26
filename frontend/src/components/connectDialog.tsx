@@ -31,7 +31,8 @@ export function ConnectDialog() {
    }
 
    async function click() {
-      await entry.methods.connect(value.username, value.tokenId, value.privacy).send({ from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" })
+      const txReceipt = await entry.methods.connect(value.username, value.tokenId, value.privacy).send({ from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" })
+      console.log(txReceipt)
    }
 
    const handleSelectChange = (selectedValue: string) => {

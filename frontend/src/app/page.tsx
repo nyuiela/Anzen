@@ -8,7 +8,6 @@ import Aurora from '@/components/aurora';
 import { useEffect, useState } from 'react';
 import { ConnectDialog } from '@/components/connectDialog';
 import Link from 'next/link';
-import { useAccount } from '@particle-network/connectkit';
 import { entry } from '@/backend/web3';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAccount } from '@/context/redux/accountSlice';
@@ -22,12 +21,12 @@ export default function Home() {
    const user = useSelector((state) => state.account)
    console.log("User : ", user)
 
-   const account = useAccount()
+   // const account = useAccount()
    const dispatch = useDispatch()
 
    useEffect(() => {
       async function getProfile() {
-         console.log("entry profile ", account.address)
+         // console.log("entry profile ", account.address)
          const profile = await entry.methods.getProfile().call({ from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" })
          const newProfile = {
             exists: Boolean(profile.exists),
@@ -43,7 +42,7 @@ export default function Home() {
          setProfile(profile)
       }
       getProfile()
-   }, [account.address, dispatch])
+   }, [dispatch])
    return (
       <div className="min-h-screen bg-background flex flex-col">
          <Aurora

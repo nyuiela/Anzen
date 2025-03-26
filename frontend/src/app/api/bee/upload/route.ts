@@ -21,9 +21,10 @@ export async function POST(req: Request) {
 
       // Save the file to the 'public/uploads' directory
 
-      const postageBatchId = await bee.createPostageBatch("17463640064", 17)
-      const result = await bee.uploadFile(postageBatchId, file, file.name)
-      console.log(result)
+      // const postageBatchId = await bee.createPostageBatch("17463640064", 17)
+      // "8040cd4dae5d3e46301db20c7a06c23f13770bea6bf4048c8f4555907c78ecb0"
+      // const result = await bee.uploadFile(postageBatchId, file, file.name)
+      // console.log(result)
 
 
       // generate witness file
@@ -36,19 +37,63 @@ export async function POST(req: Request) {
          })
       })
       const arrayBuffer = await witnessResponse.arrayBuffer();
+      console.log(arrayBuffer)
       const hexString = Array.from(new Uint8Array(arrayBuffer), byte => byte.toString(16).padStart(2, '0')).join('');
       console.log("Hex Witness:", hexString);
+
+      // Send to verification server
+      // const verificationResponse = await fetch("http://localhost:3034/prove", {
+      //    method: "POST",
+      //    headers: {
+      //       "Content-Type": "application/octet-stream" // Binary data format
+      //    },
+      //    body: JSON.stringify({
+      //       data: arrayBuffer
+      //    })  // Send raw binary data
+      // });
+
+
+      const verifyResponse = await fetch('http://127.0.0.1:3030/prove', {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/octet-stream',
+            'Content-Length': arrayBuffer.byteLength.toString()
+         },
+         body: new Uint8Array(arrayBuffer)
+      });
+
+
+      const result = await verifyResponse.json();
+      console.log("Verification Result:", result);
+
+      function witnessHashToArrayBuffer(witnessHash) {
+         // Remove 0x prefix
+         const hex = witnessHash.replace(/^0x/, '');
+
+         // Convert hex string to byte array
+         const bytes = new Uint8Array(hex.length / 2);
+         for (let i = 0; i < hex.length; i += 2) {
+            bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+         }
+
+         return bytes.buffer;
+      }
+
+      // Usage example:
+
 
       // Convert hex to bytes32 (pad to 64 characters)
       const witnessHash = `0x${hexString.padEnd(64, '0').slice(0, 64)}`;
       console.log("Bytes32 Witness:", witnessHash);
+      const arrayBufferR = witnessHashToArrayBuffer(witnessHash);
+      console.log("Array Buffer R", arrayBufferR)
 
       return NextResponse.json({
          success: "true",
          fileName: file.name,
          witnessHash: witnessHash,
-         postageBatchId: postageBatchId,
-         data: result,
+         // postageBatchId: postageBatchId,
+         // data: result,
       }, { status: 200 })
    } catch (error) {
       console.log(error)

@@ -24,9 +24,6 @@ contract DeployScript is Script {
 
         market = new MarketPlace(msg.sender, quoteAssetAddress);
         vault = new Vault();
-        vault.initialize(msg.sender, "kal");
-        string memory name = vault.getMetadata();
-        console.log("meta", name);
         factory = new VaultFactory(address(entry));
         vm.stopBroadcast();
         console.log("NEXT_PUBLIC_ENTRY_ADDRESS=", address(entry));

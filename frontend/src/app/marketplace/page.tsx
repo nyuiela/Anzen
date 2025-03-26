@@ -51,7 +51,7 @@ export default function Marketplace() {
          // Simulate API call
          await new Promise(resolve => setTimeout(resolve, 2000));
          toast.success('Purchase successful! Check your Auzen vault.');
-      } catch (error) {
+      } catch {
          toast.error('Purchase failed. Please try again.');
       } finally {
          setLoading(null);

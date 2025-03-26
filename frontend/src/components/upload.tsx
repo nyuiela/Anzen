@@ -64,11 +64,10 @@ export default function UploadFile({ vault = "" }: { vault: string }) {
 
          const result = await response.json();
          console.log("File uploaded successfully:", result);
-         const wr = arrayBufferToBytes32(result.witnessHash)
          const providerRpc = process.env.NEXT_PUBLIC_PROVIDER_RPC as string
          const web3 = new Web3(providerRpc)
          const cvault = new web3.eth.Contract(vaultAbi, vault)
-         const txReceipt = await cvault.methods.store(value.filename, wr, {
+         const txReceipt = await cvault.methods.store(value.filename, result.witnessHash, {
             dateUploaded: Math.floor(Date.now() / 1000),
             lastModified: Math.floor(Date.now() / 1000),
          }, result.data.reference).send({ from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' })
@@ -133,7 +132,7 @@ export default function UploadFile({ vault = "" }: { vault: string }) {
                      <Input id="filename" name="filename" placeholder={"kaleel"} onChange={(e) => handleChange(e)} className="col-span-3" />
                   </div>
 
-                  <div>
+                  {/* <div>
                      <label className="text-sm font-medium">Privacy Setting</label>
                      <Select
                         value={privacy}
@@ -165,7 +164,7 @@ export default function UploadFile({ vault = "" }: { vault: string }) {
                            </SelectItem>
                         </SelectContent>
                      </Select>
-                  </div>
+                  </div> */}
 
                   {uploading && (
                      <div className="space-y-2">
