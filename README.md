@@ -20,6 +20,9 @@ https://youtu.be/H8Pgdw28jM4
 
 
 ### **Vercel link**
+Auzen utilizes swarm to upload data on the decentralized storage system, this allows for swarm to be run locally and therefore allowing users to run their own nodes.
+This implementation limits our ability to provide a fully functional link to our live product. 
+However users can fully run our project by running swarm, zk servers and also the frontend.
 ```
 ```
 
@@ -33,6 +36,7 @@ By leveraging **decentralized storage, cryptographic security, and smart contrac
 **Auzen's goal is to onboard users onto Web3 while keeping their data secure.**  
 
 ---
+
 
 ## **Flow Work**
 - **User → Registers → Creates Vault → Uploads Data and Stores in Vault → Authorization Whitelist.**  
@@ -126,8 +130,41 @@ By leveraging **decentralized storage, cryptographic security, and smart contrac
 ```bash
 git clone https://github.com/nyuiela/Anzen
 cd Anzen
-cd contract
 make
 ```
+
+
+### Running Auzen
+
+1. Running the the swarm node.
+```
+https://docs.ethswarm.org/docs/develop/access-the-swarm/upload-and-download
+```
+
+
+2. Running the ZK witness generator
+The witness generator runs on `http://localhost:3031` allowing the frontend to generate a witness file from the uploaded file.
+  ```bash
+  cd zk
+  cargo build
+  cargo run --bin serve
+  ```
+
+3. Running the ZK prover and verifier
+   Runs the prover and verifier for the zk circuit on  `http://localhost:3030`, necessary for the frontend for prove generation and verifying the file(witness file).
+
+  ```bash
+  cd zk/Expander
+  cargo build
+  cargo run --bin expander-exec --release -- --circuit-file circuit.txt serve
+  ```
+
+
+4. Running the frontend (nextjs)
+  ```bash
+  cd frontend
+  npm install
+  npm run dev
+  ```
 
 
