@@ -103,9 +103,8 @@ By leveraging **decentralized storage, cryptographic security, and smart contrac
    - has the file -- send it to the zk circute -- hash is attestation that the user owns the file
    - generate a witness file, which is stored on the contracct, where users provides witnessHash to verify ownership of data 
 - **XRPL**
-  -
+  -used as a payment transaction between buying and authorizing permissions.
 
-  
 - **Swarm**
   - run a bee node --> generates an acc to sign transaction and contribute -- send funds to account buzz token/ sDai / gnosis (seeting up)
   - interact with the local node (port 1633), backend interacts with swarm to uplad user data to swarm network
